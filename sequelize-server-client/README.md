@@ -1,0 +1,2 @@
+# sequelize-server-client (KISS)
+ 
