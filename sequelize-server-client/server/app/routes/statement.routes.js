@@ -24,6 +24,6 @@ module.exports = app => {
     // Delete all Statement
     router.delete("/", statement.deleteAll);
   
-    app.use('/api/statement', router);
+    app.use('/api/statements', router);
   };
   

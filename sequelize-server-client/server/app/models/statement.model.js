@@ -13,7 +13,7 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       },
       deedNumber: {
-        type: Sequelize.NUMBER
+        type: Sequelize.STRING
       },
       notes: {
         type: Sequelize.STRING

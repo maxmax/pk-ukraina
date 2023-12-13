@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new Statement
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.title) {
+  if (!req.body.dateReceiving) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -18,6 +18,7 @@ exports.create = (req, res) => {
     diskNumber: req.body.diskNumber,
     outputName: req.body.outputName,
     inputName: req.body.inputName,
+    deedNumber: req.body.deedNumber,
     notes: req.body.notes,
     published: req.body.published ? req.body.published : false
   };
