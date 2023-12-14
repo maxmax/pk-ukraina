@@ -142,8 +142,8 @@ class StatementStore {
       .then(response => response.json())
       .then(result => {
         this.notifications = result.message;
-        this.statementData = null;
         this.getStatements();
+        this.statementData = null;
         this.state = "done";
       })
       .catch((response) => {

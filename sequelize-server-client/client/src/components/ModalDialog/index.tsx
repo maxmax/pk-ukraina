@@ -1,6 +1,8 @@
 import { useEffect, useState, Fragment } from "react";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 type ModalDialogProps = {
   children: React.ReactNode
@@ -31,6 +33,18 @@ export default function ModalDialog({ children, parentOpen, setParentOpen }: Mod
         open={open}
         onClose={handleClose}
       >
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         <DialogContent>
           {children}
         </DialogContent>
