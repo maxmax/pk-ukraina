@@ -25,6 +25,10 @@ npm run build
 npm run preview
 ```
 
+### Technical task
+
+![Technical task](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/tz.png)
+
 ### Get Table
 
 ![Get Table](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/get.png)
