@@ -13,6 +13,7 @@ export type StatementProps = {
 export type StatementStoreProps = {
   state: string;
   statementsData: StatementProps[];
+  statementData: StatementProps;
   getStatements: Function;
   getStatement: Function;
   deleteStatement: Function;
