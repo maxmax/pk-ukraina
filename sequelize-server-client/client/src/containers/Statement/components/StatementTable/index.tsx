@@ -7,6 +7,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import TablePagination from '@mui/material/TablePagination';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -19,14 +20,7 @@ import { StatementProps } from '../../types';
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
-  },
-  //"& .MuiTableCell-root": {
-  //  borderLeft: "1px solid rgba(224, 224, 224, 1)"
-  //},
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
+  }
 }));
 
 type StatementsProps = {
@@ -45,6 +39,9 @@ export default function StatementTable({
   statementData 
 }: StatementsProps) {
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
+
   const [detailDialog, setDetailDialog] = useState(false);
 
   useEffect(() => {
@@ -52,6 +49,15 @@ export default function StatementTable({
   }, [statementData, setDetailDialog]);
 
   const setEdit = (id: number) => getStatement(id);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   return (
     <>
@@ -69,7 +75,7 @@ export default function StatementTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {statements.map((row) => (
+            {statements.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
               <StyledTableRow
                 key={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -92,6 +98,17 @@ export default function StatementTable({
           </TableBody>
         </Table>
       </TableContainer>
+			<TablePagination
+				sx={{mt: 4}}
+				rowsPerPageOptions={[6, 10, 25, 100]}
+				component="div"
+				count={statements.length}
+				rowsPerPage={rowsPerPage}
+				labelRowsPerPage={'Рядків на сторінці:'}
+				page={page}
+				onPageChange={handleChangePage}
+				onRowsPerPageChange={handleChangeRowsPerPage}
+			/>
       {detailDialog &&
         <ModalDialog parentOpen={detailDialog} setParentOpen={setDetailDialog}>
           <Edit

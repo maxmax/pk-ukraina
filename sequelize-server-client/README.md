@@ -29,6 +29,10 @@ npm run preview
 
 ![Get Table](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/get.png)
 
+### Get Table + pagination on client only
+
+![Get Table](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/get-pagination.png)
+
 ### Create row
 
 ![Create row](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/create.png)
