@@ -29,6 +29,12 @@ npm run preview
 
 ![Technical task](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/tz.png)
 
+### Endpoints
+
+![Technical task](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/postman.png)
+
+
+
 ### Get Table
 
 ![Get Table](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/get.png)
