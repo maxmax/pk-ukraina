@@ -20,6 +20,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   },
+  //"& .MuiTableCell-root": {
+  //  borderLeft: "1px solid rgba(224, 224, 224, 1)"
+  //},
   // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
