@@ -3,6 +3,8 @@ import { toJS } from 'mobx';
 
 const APP_API_SOURCE = import.meta.env.VITE_APP_API_SOURCE;
 
+import { StatementStoreProps, StatementProps } from './types';
+
 class StatementStore {
   state = "none";
   statementsData = [];
@@ -78,6 +80,7 @@ class StatementStore {
       .then(response => response.json())
       .then(result => {
         this.notifications = result.message;
+        this.statementData = null;
         this.getStatements();
         this.state = "done";
       })
@@ -87,7 +90,7 @@ class StatementStore {
       });
   }
 
-  createStatement(data) {
+  createStatement(data: StatementProps) {
     const url = `${APP_API_SOURCE}/statements`;
     this.state = "pending";
     fetch(url, {
@@ -96,11 +99,19 @@ class StatementStore {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        dateReceiving: data.dateReceiving,
+        diskNumber: data.diskNumber,
+        outputName: data.outputName,
+        inputName: data.inputName,
+        deedNumber: data.deedNumber,
+        notes: data.notes        
+      })
     })
       .then(response => response.json())
       .then(result => {
         this.notifications = result.message;
+        this.statementData = null;
         this.getStatements();
         this.state = "done";
       })
@@ -110,7 +121,7 @@ class StatementStore {
       });
   }
 
-  updateStatement(data) {
+  updateStatement(data: StatementProps) {
     const url = `${APP_API_SOURCE}/statements/${data.id}`;
     this.state = "pending";
     fetch(url, {
@@ -120,13 +131,18 @@ class StatementStore {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        title: data.title,
-        description: data.description
+        dateReceiving: data.dateReceiving,
+        diskNumber: data.diskNumber,
+        outputName: data.outputName,
+        inputName: data.inputName,
+        deedNumber: data.deedNumber,
+        notes: data.notes
       })
     })
       .then(response => response.json())
       .then(result => {
         this.notifications = result.message;
+        this.statementData = null;
         this.getStatements();
         this.state = "done";
       })
