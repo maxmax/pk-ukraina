@@ -36,3 +36,7 @@ npm run preview
 ### Update/Delete row
 
 ![Update/Delete row](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/create.png)
+
+### Workbench
+
+![Workbench](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/workbench.png)
