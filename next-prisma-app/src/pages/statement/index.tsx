@@ -16,8 +16,11 @@ import {
   TableHead,
   TableRow,
   Paper,
-  TablePagination
+  TablePagination,
+  Button,
 } from '@mui/material'
+import Link from 'next/link'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -85,9 +88,12 @@ export default function Statement({
                     <TableCell align="center">{row.deedNumber}</TableCell>
                     <TableCell align="center">{row.notes}</TableCell>
                     <TableCell align="center">
-                      {/*<IconButton onClick={() => setEdit(row.id)} aria-label="settings" size="small">
-                        <SettingsIcon fontSize="inherit" />
-                      </IconButton>*/}
+                      <Link href={`statement/${row.id}`}>
+                        <Button>
+                          <Typography variant='body2'>More</Typography>
+                          <ArrowForwardIosIcon fontSize='small' />
+                        </Button>
+                      </Link>
                     </TableCell>
                   </StyledTableRow>
                 ))}

@@ -1,8 +1,8 @@
 import * as React from "react";
-// import EditServicesButton from 'src/components/Buttons/EditServices'
-// import RemoveServicesButton from 'src/components/Buttons/RemoveServices'
+import dayjs from 'dayjs';
+import EditStatementButton from 'src/components/Buttons/EditStatement'
+import RemoveStatementButton from 'src/components/Buttons/RemoveStatement'
 import CustomHead from 'src/components/CustomHead'
-// import GeoPoint from 'src/components/GeoPoint'
 import prisma from 'src/utils/prisma'
 import { useUser } from 'src/utils/swr'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
@@ -33,7 +33,7 @@ export default function StatementPage({
   statement
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { user } = useUser()
-  const isServicesBelongsToUser = user && user.id === statement.authorId
+  const isStatementBelongsToUser = user && user.id === statement.authorId
 
   return (
     <>
@@ -61,7 +61,7 @@ export default function StatementPage({
                     <span>{'Дата отримання'}</span>
                   </TableCell>
                   <TableCell>
-                    {statement.dateReceiving}
+                    {dayjs(statement.dateReceiving).format('DD/MM/YYYY')}
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -109,16 +109,16 @@ export default function StatementPage({
           </CardContent>
           <CardActions>
             <Box display='flex' justifyContent='flex-end' gap={2} width='100%'>
-              {/*isServicesBelongsToUser && (
+              {isStatementBelongsToUser && (
                 <>
-                  <EditServicesButton statement={statement} icon={false} />
-                  <RemoveServicesButton
-                    servicesId={statement.id}
+                  <EditStatementButton statement={statement} icon={false} />
+                  <RemoveStatementButton
+                    statementId={statement.id}
                     authorId={statement.authorId}
                     icon={false}
                   />
                 </>
-              )*/}
+              )}
             </Box>
           </CardActions>
         </Card>

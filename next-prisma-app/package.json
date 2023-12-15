@@ -17,6 +17,7 @@
     "@mui/icons-material": "^5.15.0",
     "@mui/joy": "^5.0.0-beta.18",
     "@mui/material": "^5.15.0",
+    "@mui/x-date-pickers": "^6.18.5",
     "@prisma/client": "^5.7.0",
     "@welldone-software/why-did-you-render": "^7.0.1",
     "argon2": "^0.31.2",

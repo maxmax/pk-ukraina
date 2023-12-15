@@ -11,11 +11,17 @@ import {
   Typography,
   Grid
 } from '@mui/material'
+
+import dayjs, { Dayjs } from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import { red } from '@mui/material/colors'
 import { useTheme } from '@mui/material/styles'
 import type { Statement } from '@prisma/client'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import FormFieldsWrapper from './Wrapper'
 import statement from '@/pages/api/statement'
 
@@ -24,7 +30,10 @@ type Props = {
 }
 
 export default function CreateStatementForm({ closeModal }: Props) {
-    const theme = useTheme()
+
+		const [dataValue, setDataValue] = useState<Dayjs | null>(dayjs(new Date()));
+    
+		const theme = useTheme()
     const { user, accessToken } = useUser()
     const router = useRouter()
   
@@ -35,7 +44,6 @@ export default function CreateStatementForm({ closeModal }: Props) {
     if (!user) return null
   
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
-			console.log('KKKKKKKKKKK!!!!!!!');
       if (!user) return
       e.preventDefault()
       const formData = Object.fromEntries(
@@ -48,7 +56,10 @@ export default function CreateStatementForm({ closeModal }: Props) {
       try {
         const response = await fetch('/api/statement', {
           method: 'POST',
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+						...formData,
+						dateReceiving: dataValue.$d
+					}),
           headers: {
             Authorization: `Bearer ${accessToken}`
           }
@@ -79,19 +90,23 @@ export default function CreateStatementForm({ closeModal }: Props) {
     return (
       <FormFieldsWrapper handleSubmit={handleSubmit}>
         <Typography variant='h4'>{'Створити заявку'}</Typography>
-        <FormControl required>
+				<LocalizationProvider dateAdapter={AdapterDayjs}>
+					<DatePicker 
+						label="Дата отримання"
+						value={dataValue} 
+						format="DD/MM/YYYY"
+						onChange={(newValue) => setDataValue(newValue)} 
+					/>
+				</LocalizationProvider>
+        {/*<FormControl required>
           <InputLabel htmlFor='dateReceiving'>Дата отримання</InputLabel>
-					{/*TODO: replace to mui datepicker*/}
           <Input
             sx={{ gap: theme.spacing(1) }}
             id='dateReceiving'
             type='text'
             name='dateReceiving'
-            // inputProps={{
-            //  minLength: 3
-            // }}
           />
-        </FormControl>
+        </FormControl>*/}
         <Grid container spacing={2}>
 					<Grid item xs={6}>
 						<FormControl required>
