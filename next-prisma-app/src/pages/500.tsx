@@ -9,13 +9,6 @@ export default function Custom500() {
       <Typography variant='h4' textAlign='center' mt={2} mb={4}>
         Server error occurred
       </Typography>
-      <Image
-        width={256}
-        height={256}
-        src='/img/500.png'
-        alt='Server error'
-        style={{ margin: '0 auto' }}
-      />
     </>
   )
 }

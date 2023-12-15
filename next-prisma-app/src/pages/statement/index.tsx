@@ -6,8 +6,7 @@ import CreateStatementButton from 'src/components/Buttons/CreateStatement'
 import CustomHead from 'src/components/CustomHead'
 import prisma from 'src/utils/prisma'
 import { 
-  Divider, 
-  Grid, 
+  Divider,
   Typography,
   Table,
   TableBody,

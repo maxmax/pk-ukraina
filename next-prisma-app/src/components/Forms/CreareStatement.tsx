@@ -98,15 +98,6 @@ export default function CreateStatementForm({ closeModal }: Props) {
 						onChange={(newValue) => setDataValue(newValue)} 
 					/>
 				</LocalizationProvider>
-        {/*<FormControl required>
-          <InputLabel htmlFor='dateReceiving'>Дата отримання</InputLabel>
-          <Input
-            sx={{ gap: theme.spacing(1) }}
-            id='dateReceiving'
-            type='text'
-            name='dateReceiving'
-          />
-        </FormControl>*/}
         <Grid container spacing={2}>
 					<Grid item xs={6}>
 						<FormControl required>

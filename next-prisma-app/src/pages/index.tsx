@@ -3,7 +3,7 @@ import CustomHead from 'src/components/CustomHead'
 import Slider from 'src/components/Slider'
 import type { Blocks } from 'src/types'
 import { useUser } from 'src/utils/swr'
-import { Box, Grid } from '@mui/material'
+import { Box, Container, Divider } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import Image from 'next/image'
@@ -22,7 +22,22 @@ export default function Home({
       <Typography variant='h4' textAlign='center' py={2}>
         {'Ласкаво просимо'}, {user ? user.username || user.email : 'незнайомець'}
       </Typography>
-      <Box my={2}>Test</Box>
+      <Typography variant='h6' textAlign='center' py={2}>
+        {'Новини або якась важлива інформація щодо сервісу'}
+      </Typography>
+      <Container maxWidth="sm" sx={{pb: 8}}>
+        {blocks.map((block, i) => (
+          <Box key={block.id}>
+            <Typography variant='h7' textAlign='center' py={2}>
+              {block.title}
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              {block.description}
+            </Typography>
+            <Divider />
+          </Box>
+        ))}
+      </Container>
     </>
   )
 }
