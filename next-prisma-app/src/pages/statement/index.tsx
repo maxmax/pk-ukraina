@@ -89,7 +89,7 @@ export default function Statement({
                     <TableCell align="center">
                       <Link href={`statement/${row.id}`}>
                         <Button>
-                          <Typography variant='body2'>More</Typography>
+                          <Typography variant='body2'>{'Більше'}</Typography>
                           <ArrowForwardIosIcon fontSize='small' />
                         </Button>
                       </Link>
@@ -100,7 +100,7 @@ export default function Statement({
             </Table>
           </TableContainer>
           <TablePagination
-            sx={{mt: 4}}
+            sx={{mt: 4, mb: 4}}
             rowsPerPageOptions={[6, 10, 25, 100]}
             component="div"
             count={statement.length}
