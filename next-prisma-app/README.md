@@ -12,6 +12,28 @@ pnpm dev
 bun dev
 ```
 
+**Login**
+
+![Login](https://github.com/maxmax/pk-ukraina/raw/main/next-prisma-app/docs/login.png)
+
+**Table**
+
+![Table](https://github.com/maxmax/pk-ukraina/raw/main/next-prisma-app/docs/table.png)
+
+**Detail**
+
+![Detail](https://github.com/maxmax/pk-ukraina/raw/main/next-prisma-app/docs/detail.png)
+
+**New**
+
+![Detail](https://github.com/maxmax/pk-ukraina/raw/main/next-prisma-app/docs/new.png)
+
+**Edit**
+
+![Edit](https://github.com/maxmax/pk-ukraina/raw/main/next-prisma-app/docs/edit.png)
+
+### Загальний опис, як усе працює
+
 **Main**
 
 Створюємо новий Next.js-проект із підтримкою TS за допомогою Create Next App:
@@ -224,7 +246,7 @@ export type AuthGuardMiddleware = (
 
 ### CRUD-операції для Відомості про рух носія
 
-Серверна частина нашої програми майже готова. Залишилося реалізувати роути для додавання, редагування та видалення.
+Серверна частина нашої програми готова. Залишилося реалізувати роути для додавання, редагування та видалення.
 
 Зверніть увагу: всі наступні роути захищені.
 
@@ -232,7 +254,7 @@ export type AuthGuardMiddleware = (
 
 **Створюємо в директорії api файл statement.ts.**
 
-У всіх випадках у відповідь на запит повертаються дані Відомості.
+У всіх випадках у відповідь на запит повертаються дані відомості.
 
 Таким чином, у нас є 3 роути для Відомостей:
 
@@ -242,4 +264,205 @@ export type AuthGuardMiddleware = (
 
 **Також визначаємо деякі заголовки HTTP, пов'язані з безпекою, у next.config.js для всіх роутів**
 
-...
+## Клієнт
+
+*Налаштування проекту*
+
+[Why Did You Render](https://github.com/welldone-software/why-did-you-render) – утиліта для налагодження React-додатків, що дозволяє визначити причину повторного рендерингу компонента. Для того, щоб мати можливість використовувати цю утиліту в Next.js-додатку, необхідно зробити 2 речі:
+
++ налаштувати пресет (preset) транспілятора Babel;
++ ініціалізувати утиліту та імпортувати її в основний компонент програми.
+
+Налаштовуємо пресет Babel у файлі babel.config.js у корені проекту:
+
+~~~
+module.exports = function (api) {
+  const isServer = api.caller((caller) => caller?.isServer)
+  const isCallerDevelopment = api.caller((caller) => caller?.isDev)
+
+  // пресети
+  const presets = [
+    [
+      'next/babel',
+      {
+        'preset-react': {
+          runtime: 'automatic',
+          importSource:
+            // код wdyr повинен виконуватися лише на клієнті
+            // і лише у режимі розробки
+            !isServer && isCallerDevelopment
+              ? '@welldone-software/why-did-you-render'
+              : 'react'
+        }
+      }
+    ]
+  ]
+
+  return { presets }
+}
+~~~
+
+**Ініціалізуємо WDYR у файлі utils/wdyr.ts:**
+
+~~~
+import React from 'react'
+
+// код виконується лише у режимі розробки
+// і лише на клієнті
+if (process.env.NODE_ENV === 'development' && typeof document !== 'undefined') {
+  const whyDidYouRender = require('@welldone-software/why-did-you-render')
+  whyDidYouRender(React, {
+    trackAllPureComponents: true
+  })
+}
+
+export {}
+~~~
+
+Імпортуємо WDYR у файлі _app.tsx:
+
+~~~
+import '@/utils/wdyr'
+~~~
+
+Після цього для налагодження у файлі компонента достатньо додати такий рядок:
+
+~~~
+SomeComponent.whyDidYouRender = true
+~~~
+
+##### Material UI
+
+Material UI – найпопулярніша бібліотека компонентів React. Для її правильного використання в Next.js-додатку необхідно зробити 2 речі:
+
++ налаштувати плагін (plugin) Babel;
++ налаштувати кеш Emotion - рішення CSS-в-JS, яке використовується MUI для стилізації компонентів.
+
+Та налаштовуємо плагін Babel у файлі babel.config.js
+
+~~~
+module.exports = function (api) {
+  // Пресети
+  // ...
+
+  // плагіни
+  const plugins = [
+    [
+      'babel-plugin-import',
+      {
+        libraryName: '@mui/material',
+        libraryDirectory: '',
+        camel2DashComponentName: false
+      },
+      'core'
+    ]
+  ]
+
+  return { presets, plugins }
+}
+~~~
+
+Навіщо потрібен цей плагін? Для зменшення розміру клієнтського складання. Проблема в тому, що під час імпорту компонента MUI за назвою, наприклад:
+
+~~~
+import { Button } from '@mui/material'
+~~~
+
+У складання потрапить весь пакет @mui/material, тобто. всі компоненти MUI незалежно від того, використовуються вони у додатку чи ні. babel-plugin-import перетворює іменований імпорт на дефолтний, тобто. на виході ми отримуємо, наприклад:
+
+~~~
+import Button from '@mui/material/Button'
+~~~
+
+Таким чином, у складання потрапляють лише компоненти, що використовуються у додатку.
+
+Налаштування кешу Emotion необхідне для запобігання спалаху нестилізованого контенту (flash of unstyled content), наприклад, коли спочатку завантажуються дефолтні стилі браузера і тільки потім стилі MUI, а також забезпечення можливості легкої перезапису стилів MUI, тобто. кастомізації компонентів
+
+**Визначаємо утиліту для створення кешу Emotion у файлі**
+
++ utils/createEmotionCache.ts
+
+~~~
+import createCache from '@emotion/cache'
+
+// Створюємо на клієнті тег `meta` з `name="emotion-insertion-point"` на початку <head>.
+// Це дозволяє завантажувати стилі MUI у першочерговому порядку.
+// Це також дозволяє розробникам легко перезаписувати стилі MUI, наприклад, за допомогою модулей CSS.
+
+export default function createEmotionCache() {
+  let insertionPoint
+
+  if (typeof document !== 'undefined') {
+    const emotionInsertionPoint = document.querySelector<HTMLMetaElement>(
+      'meta[name="emotion-insertion-point"]'
+    )
+    insertionPoint = emotionInsertionPoint ?? undefined
+  }
+
+  return createCache({ key: 'mui-style', insertionPoint })
+}
+~~~
+
+Кеш необхідно створювати під час запуску програми як на сервері, так і на клієнті.
+
++ Налаштовуємо рендеринг документа у файлі _document.tsx (створення кешу на сервері):
++ Налаштовуємо рендеринг компонентів у файлі _app.tsx (створення кешу на клієнті):
+
+#### Формування структури компонентів
+
+У нашому додатку використовуватиметься декілька "глобальних" компонентів:
+
++ компонент повідомлень (react-toastify);
++ запобіжник (react-error-boundary).
+
+У нас буде загальний макет (layout) для всіх сторінок програми. Ми сформуємо його прямо у _app.tsx.
+
+Крім того, ми будемо анімувати перехід між сторінками за допомогою @formkit/auto-animate (цю утиліту можна розглядати як сучасну альтернативу React Transition Group).
+
+Імпортуємо компоненти та стилі, та формуємо структуру компонентів в _app.tsx
+
++ Додаємо компонент для додавання метаданих до розділу head документа (components/head.tsx)
++ Резервний компонент (components/ErrorFallback.tsx)
++ Підвал сайту (components/Footer.tsx)
++ Шапка сайтy (components/Header.tsx)
++ Десктопне меню (components/Menu/Desktop.tsx): *Даний компонент є список посилань і кнопку профілю.*
++ Мобільне меню (components/Menu/Mobile.tsx)
+
+#### Аутентифікація, авторизація та завантаження файлів
+
+Під час запуску програма запитує у сервера дані користувача. Це єдині дані, за зміною яких "спостерігає" додаток. Запит даних користувача реалізовано за допомогою SWR. SWR дозволяє кешувати дані та мутувати їх за потреби, наприклад, після реєстрації користувача. Завдяки SWR ми можемо обійтися без інструменту управління станом програми (state manager).
+
+- Визначаємо абстракцію над SWR для отримання даних користувача у файлі utils/swr.ts:
+
+#### Аутентификация и авторизация
+
+- У шапці сайті є кнопка профілю (Buttons/Profile.tsx)
+
+- Функціонал реєстрації, авторизації, завантаження аватарів та виходу із системи інкапсульований у модальному вікні (components/Modal.tsx):
+
+- За відсутності даних користувача вмістом модалки є вкладки аутентифікації (components/AuthTabs.tsx):
+
+- Форма реєстрації (components/Forms/Register.tsx):
+
+#### Панель користувача
+
+За наявності даних користувача вмістом модалки, яка рендерується при натисканні кнопки профілю, є панель користувача (components/UserPanel.tsx), що містить форму для завантаження аватара і кнопку для виходу користувача з системи:
+
+- Форма завантаження аватара (components/Forms/Upload.tsx):
+- Кнопка для виходу із системи (components/Buttons/Logout.tsx):
+*Після завантаження аватар користувача відображається у шапці сайті на місці кнопки профілю.*
+
+#### Створення, оновлення, видалення відомостей
+
+Для створення сторінки "Відомості про рух носія" та детальних сторінок використовується рендеринг на стороні сервера за допомогою функції getServerSideProps. Ця функція дозволяє виконувати серверний код і викликатиметься при кожному запиті сторінки.
+
+На сторінці "Відомості про рух носія" (pages/statement/index.tsx) рендерується кнопка для створення нової відомості та її список у вигляді таблиці (за наявності):
+
+- Кнопка створення відомості (components/Button/CreateStatement.tsx)
+- Форма створення відомості (components/Forms/CreateStatement.tsx)
+- Сторінка відомості (pages/statement/[id].tsx)
+- Кнопка видалення відомості (components/Buttons/RemoveStatement.tsx)
+- Кнопка редагування відомості (components/Buttons/EditStatement.tsx)
+*При натисканні цієї кнопки мода рендерується з формою для редагування відомості (components/Forms/EditStatement.tsx), яка майже ідентична формі створення посту.*
+
+**Із загальним описом функціоналу ми поки що закінчили:)**
