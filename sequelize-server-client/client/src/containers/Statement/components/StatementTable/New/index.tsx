@@ -19,7 +19,7 @@ export default function New({
 	createStatement
 }: DataTypes) {
 
-	const [dataValue, setDataValue] = useState<Dayjs | null>(dayjs(new Date()));
+	const [dataValue, setDataValue] = useState<Dayjs | null>(dayjs());
 	
 	const [attributes, setAttributes] = useState({
 		dateReceiving: '',
@@ -37,12 +37,20 @@ export default function New({
     });
   };
 
-  useEffect(() => {
-    setAttributes({
-      ...attributes,
-			dateReceiving: dataValue.$d
-    });
-  }, [dataValue, setAttributes]);
+  //useEffect(() => {
+  //  setAttributes({
+  //    ...attributes,
+	//		dateReceiving: dataValue.$d
+  //  });
+  //}, [dataValue, setAttributes]);
+	useEffect(() => {
+		if (dataValue !== null) {
+			setAttributes({
+				...attributes,
+				dateReceiving: String(dataValue.toDate())
+			});
+		}
+	}, [dataValue, setAttributes]);
 
 	const setUpdateStatement = () => {
 		createStatement(attributes);
