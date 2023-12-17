@@ -21,6 +21,7 @@ export default function New({
 
 	const [dataValue, setDataValue] = useState<Dayjs | null>(dayjs());
 	
+	
 	const [attributes, setAttributes] = useState({
 		dateReceiving: '',
 		diskNumber: '',
@@ -36,13 +37,7 @@ export default function New({
       [e.target.name]: e.target.value
     });
   };
-
-  //useEffect(() => {
-  //  setAttributes({
-  //    ...attributes,
-	//		dateReceiving: dataValue.$d
-  //  });
-  //}, [dataValue, setAttributes]);
+	
 	useEffect(() => {
 		if (dataValue !== null) {
 			setAttributes({
