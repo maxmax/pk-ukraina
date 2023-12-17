@@ -11,7 +11,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { StatementProps } from '../../types';
+import { StatementProps } from '../../../types';
 
 type DataTypes = {
 	statementData: StatementProps;
@@ -36,12 +36,14 @@ export default function Edit({
     });
   };
 
-  useEffect(() => {
-    setAttributes({
-      ...attributes,
-			dateReceiving: dataValue.$d
-    });
-  }, [dataValue, setAttributes]);
+	useEffect(() => {
+		if (dataValue !== null) {
+			setAttributes({
+				...attributes,
+				dateReceiving: String(dataValue.toDate())
+			});
+		}
+	}, [dataValue, setAttributes]);
 
 	const setUpdateStatement = () => {
 		updateStatement(attributes);
