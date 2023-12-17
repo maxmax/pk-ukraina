@@ -13,3 +13,5 @@
 To
 
 - DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+
+**Нічого не заважає робити те саме і на sequelize-server-client прикрутити роути масштабувати як завгодно та т.п, Взагалі sequelize-server-client додаток це быльш класичне SPA, NextJs надає більше можливостей для серверного рендерингу**
