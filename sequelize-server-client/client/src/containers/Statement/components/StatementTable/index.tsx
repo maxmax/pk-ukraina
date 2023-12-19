@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TablePagination from '@mui/material/TablePagination';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TablePagination,
+  Paper,
+  IconButton,
+  Box,
+} from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import ModalDialog from '../../../../components/ModalDialog';
@@ -20,28 +23,33 @@ import { StatementProps } from '../../types';
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
-  }
+  },
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
 }));
 
-type StatementsProps = {
-  statements: StatementProps[]
-  getStatement: Function;
-	updateStatement: Function;
-	deleteStatement: Function;
-  statementData: StatementProps;
-}
+const tableStyles = {
+  minWidth: 650,
+};
 
-export default function StatementTable({ 
+type StatementsProps = {
+  statements: StatementProps[];
+  getStatement: Function;
+  updateStatement: Function;
+  deleteStatement: Function;
+  statementData: StatementProps;
+};
+
+const StatementTable: React.FC<StatementsProps> = ({
   statements,
   getStatement,
-	updateStatement,
-	deleteStatement,
-  statementData 
-}: StatementsProps) {
-
+  updateStatement,
+  deleteStatement,
+  statementData,
+}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
-
   const [detailDialog, setDetailDialog] = useState(false);
 
   useEffect(() => {
@@ -60,9 +68,9 @@ export default function StatementTable({
   };
 
   return (
-    <>
+    <Box>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={tableStyles} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell align="center">{'Дата отримання'}</TableCell>
@@ -76,12 +84,9 @@ export default function StatementTable({
           </TableHead>
           <TableBody>
             {statements.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <StyledTableRow
-                key={row.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
+              <StyledTableRow key={row.id}>
                 <TableCell component="th" scope="row">
-                  {dayjs(row?.dateReceiving).format('DD/MM/YYYY')}
+                  {dayjs(row.dateReceiving).format('DD/MM/YYYY')}
                 </TableCell>
                 <TableCell align="center">{row.diskNumber}</TableCell>
                 <TableCell align="center">{row.outputName}</TableCell>
@@ -98,26 +103,28 @@ export default function StatementTable({
           </TableBody>
         </Table>
       </TableContainer>
-			<TablePagination
-				sx={{mt: 4}}
-				rowsPerPageOptions={[6, 10, 25, 100]}
-				component="div"
-				count={statements.length}
-				rowsPerPage={rowsPerPage}
-				labelRowsPerPage={'Рядків на сторінці:'}
-				page={page}
-				onPageChange={handleChangePage}
-				onRowsPerPageChange={handleChangeRowsPerPage}
-			/>
-      {detailDialog &&
+      <TablePagination
+        sx={{ mt: 4 }}
+        rowsPerPageOptions={[6, 10, 25, 100]}
+        component="div"
+        count={statements.length}
+        rowsPerPage={rowsPerPage}
+        labelRowsPerPage={'Рядків на сторінці:'}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+      {detailDialog && (
         <ModalDialog parentOpen={detailDialog} setParentOpen={setDetailDialog}>
           <Edit
-						statementData={statementData} 
-						updateStatement={updateStatement}
-						deleteStatement={deleteStatement}
-					/>
+            statementData={statementData}
+            updateStatement={updateStatement}
+            deleteStatement={deleteStatement}
+          />
         </ModalDialog>
-      }
-    </>
+      )}
+    </Box>
   );
-}
+};
+
+export default StatementTable;

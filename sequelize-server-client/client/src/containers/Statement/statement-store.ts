@@ -92,7 +92,7 @@ class StatementStore {
 
   createStatement(data: StatementProps) {
     const url = `${APP_API_SOURCE}/statements`;
-    this.state = "pending";
+    // this.state = "pending";
     fetch(url, {
       method: 'POST',
       headers: {
@@ -113,7 +113,7 @@ class StatementStore {
         this.notifications = result.message;
         this.statementData = null;
         this.getStatements();
-        this.state = "done";
+        // this.state = "done";
       })
       .catch((response) => {
         console.log('error:', response)
@@ -123,7 +123,7 @@ class StatementStore {
 
   updateStatement(data: StatementProps) {
     const url = `${APP_API_SOURCE}/statements/${data.id}`;
-    this.state = "pending";
+    // this.state = "pending";
     fetch(url, {
       method: 'PUT',
       headers: {
@@ -144,7 +144,7 @@ class StatementStore {
         this.notifications = result.message;
         this.getStatements();
         this.statementData = null;
-        this.state = "done";
+        // this.state = "done";
       })
       .catch((response) => {
         console.log('error:', response)
