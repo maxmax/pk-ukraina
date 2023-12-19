@@ -1,12 +1,12 @@
 import { observer, inject } from 'mobx-react';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from 'react';
 import {
   Container,
   Typography,
   Box,
   CircularProgress,
   Button,
-  ButtonGroup
+  ButtonGroup,
 } from '@mui/material';
 import Footer from '../../components/Footer';
 import ModalDialog from '../../components/ModalDialog';
@@ -15,11 +15,22 @@ import New from './components/StatementTable/New';
 
 import { StatementStoreProps } from './types';
 
+type StatementState = 'pending' | 'done' | 'error';
+const PENDING: StatementState = 'pending';
+const DONE: StatementState = 'done';
+const ERROR: StatementState = 'error';
+
+const centerStyles = { display: 'flex', alignItems: 'center', justifyContent: 'center' };
+const gridStyles = { mt: 4, display: 'grid', alignItems: 'center', justifyContent: 'center' };
+
 interface StatementProps {
-  statementStore: StatementStoreProps;
+  statementStore?: StatementStoreProps;
 }
 
 function Statement({ statementStore }: StatementProps) {
+  if (!statementStore) {
+    throw new Error('statementStore is required.'); // Обработка отсутствия statementStore
+  }
 
   const {
     state,
@@ -30,21 +41,24 @@ function Statement({ statementStore }: StatementProps) {
     deleteStatement,
     createStatement,
     updateStatement,
-    notifications
+    notifications,
   } = statementStore;
 
   const [newDialog, setNewDialog] = useState(false);
 
-  const setNew = () => setNewDialog(true);
-  
-  useEffect(() => {
-    const currentState = state === "done" || state === "error";
-    !currentState && getStatements();
-  }, [statementsData, getStatements, state]);
+  const setNew = useCallback(() => setNewDialog(true), [setNewDialog]);
+  const getStatementsMemoized = useCallback(() => getStatements(), [getStatements, statementsData, state]);
 
-  if (!!notifications) {
-    console.log('notifications:', notifications)
-  }
+  useEffect(() => {
+    const currentState = state === DONE || state === ERROR;
+    !currentState && getStatementsMemoized();
+  }, [getStatementsMemoized, state]);
+
+  useEffect(() => {
+    if (notifications) {
+      console.log('notifications:', notifications);
+    }
+  }, [notifications]);
 
   return (
     <Container maxWidth="lg">
@@ -52,32 +66,32 @@ function Statement({ statementStore }: StatementProps) {
         <Typography variant="h6" component="h1" align="center" gutterBottom>
           {'Відомості про рух носія'}
         </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', m: 2 }}>
+        <Box sx={{ ...centerStyles, m: 2 }}>
           <ButtonGroup variant="text" aria-label="text button group">
-            <Button onClick={() => setNew()}>{'Створити новий'}</Button>
+            <Button onClick={setNew}>{'Створити новий'}</Button>
           </ButtonGroup>
         </Box>
-        <Box sx={{ mt: 4, display: 'grid', alignItems: 'center', justifyContent: 'center' }}>
-          {!statementsData[0] && state === "pending" && ( <CircularProgress /> )}
-          {statementsData[0] && state === "done" &&
-            <StatementTable 
-              statements={statementsData} 
+        <Box sx={{ ...gridStyles }}>
+          {!statementsData[0] && state === PENDING && <CircularProgress />}
+          {statementsData[0] && state === DONE && (
+            <StatementTable
+              statements={statementsData}
               getStatement={getStatement}
               updateStatement={updateStatement}
               deleteStatement={deleteStatement}
               statementData={statementData}
             />
-          }
+          )}
         </Box>
       </Box>
       <Footer />
-      {newDialog &&
+      {newDialog && (
         <ModalDialog parentOpen={newDialog} setParentOpen={setNewDialog}>
           <New createStatement={createStatement} />
         </ModalDialog>
-      }
+      )}
     </Container>
   );
 }
 
-export default inject("statementStore")(observer(Statement));
+export default inject('statementStore')(observer(Statement));
