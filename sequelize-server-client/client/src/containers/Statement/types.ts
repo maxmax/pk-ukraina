@@ -32,4 +32,5 @@ export type StatementStoreProps = {
   createStatement: Function;
   updateStatement: Function;
   notifications: string;
+  setNotifications: Function;
 };

@@ -28,12 +28,17 @@ class StatementStore {
       deleteStatement: action.bound,
       createStatement: action.bound,
       updateStatement: action.bound,
+      setNotifications: action.bound,
     });
     
     this.state = "none";
     this.statementsData = [];
     this.statementData = null;
     this.notifications = null;
+  }
+
+  setNotifications(value: string | null) {
+    this.notifications = value;
   }
 
   // Отримуємо всі заявки, але взагалі вона нам уже не впала, потім її заберу
@@ -79,7 +84,7 @@ class StatementStore {
     try {
       this.state = "pending";
       const result = await performRequest<ApiResponse>(`statements/${id}`, 'DELETE');
-      this.notifications = result.message;
+      await this.setNotifications(result.message);
       this.statementData = null;
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
@@ -92,7 +97,7 @@ class StatementStore {
     try {
       this.state = "pending";
       const result = await performRequest<ApiResponse>('statements', 'POST', data);
-      this.notifications = result.message;
+      await this.setNotifications("New request created!");
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
       this.state = "error";
@@ -104,7 +109,7 @@ class StatementStore {
     try {
       this.state = "pending";
       const result = await performRequest<ApiResponse>(`statements/${data.id}`, 'PUT', data);
-      this.notifications = result.message;
+      await this.setNotifications(result.message);
       this.statementData = null;
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
