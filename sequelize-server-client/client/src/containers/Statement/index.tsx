@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import Footer from '../../components/Footer';
 import ModalDialog from '../../components/ModalDialog';
+import Notification from '../../components/Notification';
 import StatementTable from './components/StatementTable';
 import New from './components/StatementTable/New';
 
@@ -46,6 +47,7 @@ function Statement({ statementStore }: StatementProps) {
     createStatement,
     updateStatement,
     notifications,
+    setNotifications,
   } = statementStore;
 
   const [newDialog, setNewDialog] = useState(false);
@@ -68,6 +70,12 @@ function Statement({ statementStore }: StatementProps) {
 
   return (
     <Container maxWidth="lg">
+      {!!notifications &&
+        <Notification 
+          notifications={notifications}
+          setNotifications={setNotifications}
+        />
+      }
       <Box sx={{ m: 4 }}>
         <Typography variant="h6" component="h1" align="center" gutterBottom>
           {'Відомості про рух носія'}
