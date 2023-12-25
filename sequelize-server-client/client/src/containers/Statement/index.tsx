@@ -15,10 +15,11 @@ import New from './components/StatementTable/New';
 
 import { StatementStoreProps } from './types';
 
-type StatementState = 'pending' | 'done' | 'error';
+type StatementState = 'pending' | 'done' | 'error' | 'none';
 const PENDING: StatementState = 'pending';
 const DONE: StatementState = 'done';
 const ERROR: StatementState = 'error';
+const NONE: StatementState = 'none';
 
 const centerStyles = { display: 'flex', alignItems: 'center', justifyContent: 'center' };
 const gridStyles = { mt: 4, display: 'grid', alignItems: 'center', justifyContent: 'center' };
@@ -34,9 +35,12 @@ function Statement({ statementStore }: StatementProps) {
 
   const {
     state,
+    page,
+    pageSize,
     statementsData,
     statementData,
-    getStatements,
+    statementsDataPagination,
+    getStatementsPagination,
     getStatement,
     deleteStatement,
     createStatement,
@@ -47,12 +51,14 @@ function Statement({ statementStore }: StatementProps) {
   const [newDialog, setNewDialog] = useState(false);
 
   const setNew = useCallback(() => setNewDialog(true), [setNewDialog]);
-  const getStatementsMemoized = useCallback(() => getStatements(), [getStatements, statementsData, state]);
 
   useEffect(() => {
-    const currentState = state === DONE || state === ERROR;
-    !currentState && getStatementsMemoized();
-  }, [getStatementsMemoized, state]);
+    const currentState = state === DONE || state === ERROR || state === NONE;
+    const dataLoaded = statementsDataPagination && statementsDataPagination.statements.length > 0;
+    if (!dataLoaded && currentState) {
+      getStatementsPagination(page, pageSize);
+    }
+  }, [getStatementsPagination, statementsDataPagination, state]);
 
   useEffect(() => {
     if (notifications) {
@@ -72,14 +78,16 @@ function Statement({ statementStore }: StatementProps) {
           </ButtonGroup>
         </Box>
         <Box sx={{ ...gridStyles }}>
-          {!statementsData[0] && state === PENDING && <CircularProgress />}
-          {statementsData[0] && state === DONE && (
+          {!statementsDataPagination && state === PENDING && <CircularProgress />}
+          {statementsDataPagination && state === DONE && (
             <StatementTable
               statements={statementsData}
               getStatement={getStatement}
               updateStatement={updateStatement}
               deleteStatement={deleteStatement}
               statementData={statementData}
+              statementsDataPagination={statementsDataPagination}
+              getStatementsPagination={getStatementsPagination}
             />
           )}
         </Box>
