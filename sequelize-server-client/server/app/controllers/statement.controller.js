@@ -60,7 +60,11 @@ exports.findPagination = (req, res) => {
   const limit = parseInt(pageSize, 10);
   const offset = (parseInt(page, 10) - 1) * limit;
 
-  Statement.findAndCountAll({ limit, offset })
+  Statement.findAndCountAll({
+    limit,
+    offset,
+    order: [['createdAt', 'DESC']] // Добавляем сортировку по убыванию даты
+  })
     .then(data => {
       const totalPages = Math.ceil(data.count / limit);
 
