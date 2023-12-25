@@ -18,7 +18,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ModalDialog from '../../../../components/ModalDialog';
 import Edit from './Edit';
 
-import { StatementProps } from '../../types';
+import { StatementProps, StatementDataPagination } from '../../types';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -39,6 +39,8 @@ type StatementsProps = {
   updateStatement: Function;
   deleteStatement: Function;
   statementData: StatementProps;
+  statementsDataPagination: StatementDataPagination;
+  getStatementsPagination: Function;
 };
 
 const StatementTable: React.FC<StatementsProps> = ({
@@ -47,9 +49,11 @@ const StatementTable: React.FC<StatementsProps> = ({
   updateStatement,
   deleteStatement,
   statementData,
+  statementsDataPagination,
+  getStatementsPagination
 }) => {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [page, setPage] = useState(statementsDataPagination.currentPage - 1);
+  const [rowsPerPage, setRowsPerPage] = useState(statementsDataPagination.pageSize);
   const [detailDialog, setDetailDialog] = useState(false);
 
   useEffect(() => {
@@ -60,11 +64,18 @@ const StatementTable: React.FC<StatementsProps> = ({
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
+    updateGetStatementsPagination(newPage, rowsPerPage);
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(+event.target.value);
+    const pageSize = +event.target.value;
+    setRowsPerPage(pageSize);
     setPage(0);
+    updateGetStatementsPagination(0, pageSize);
+  };
+
+  const updateGetStatementsPagination = (page: number, pageSize: number) => {
+    getStatementsPagination(page + 1, pageSize);
   };
 
   return (
@@ -83,7 +94,7 @@ const StatementTable: React.FC<StatementsProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {statements.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+            {statementsDataPagination.statements.map((row) => (
               <StyledTableRow key={row.id}>
                 <TableCell component="th" scope="row">
                   {dayjs(row.dateReceiving).format('DD/MM/YYYY')}
@@ -105,9 +116,9 @@ const StatementTable: React.FC<StatementsProps> = ({
       </TableContainer>
       <TablePagination
         sx={{ mt: 4 }}
-        rowsPerPageOptions={[6, 10, 25, 100]}
+        rowsPerPageOptions={[5, 10, 25, 100]}
         component="div"
-        count={statements.length}
+        count={statementsDataPagination.totalItems}
         rowsPerPage={rowsPerPage}
         labelRowsPerPage={'Рядків на сторінці:'}
         page={page}
