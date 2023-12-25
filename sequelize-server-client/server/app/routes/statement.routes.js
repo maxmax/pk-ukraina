@@ -9,6 +9,10 @@ module.exports = app => {
 	// Retrieve all Statement
 	router.get("/", statement.findAll);
 
+	// Retrieve all Statement with pagination
+	// api/statements/pagination?page=1&pageSize=2
+	router.get("/pagination", statement.findPagination);
+
 	// Retrieve all published Statement
 	router.get("/published", statement.findAllPublished);
 

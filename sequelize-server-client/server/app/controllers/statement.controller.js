@@ -53,6 +53,32 @@ exports.findAll = (req, res) => {
     });
 };
 
+// Retrieve by Pagination Statement from the database.
+exports.findPagination = (req, res) => {
+  const { page = 1, pageSize = 10 } = req.query;
+
+  const limit = parseInt(pageSize, 10);
+  const offset = (parseInt(page, 10) - 1) * limit;
+
+  Statement.findAndCountAll({ limit, offset })
+    .then(data => {
+      const totalPages = Math.ceil(data.count / limit);
+
+      res.send({
+        totalItems: data.count,
+        totalPages,
+        currentPage: parseInt(page, 10),
+        pageSize: limit,
+        statements: data.rows,
+      });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving Statement."
+      });
+    });
+};
+
 // Find a single Statement with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
