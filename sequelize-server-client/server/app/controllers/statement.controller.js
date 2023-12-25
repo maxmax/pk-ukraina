@@ -53,26 +53,14 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Retrieve by Pagination with dateReceiving Statement from the database.
-// api/statements/pagination?page=1&pageSize=2&dateReceiving=2022-01-01
-// api/statements/pagination?page=1&pageSize=2
+// Retrieve by Pagination Statement from the database.
 exports.findPagination = (req, res) => {
-  const { page = 1, pageSize = 10, dateReceiving } = req.query;
+  const { page = 1, pageSize = 10 } = req.query;
 
   const limit = parseInt(pageSize, 10);
   const offset = (parseInt(page, 10) - 1) * limit;
 
-  let condition = {};
-
-  if (dateReceiving) {
-    condition = {
-      dateReceiving: {
-        [Op.like]: `%${dateReceiving}%`,
-      },
-    };
-  }
-
-  Statement.findAndCountAll({ where: condition, limit, offset })
+  Statement.findAndCountAll({ limit, offset })
     .then(data => {
       const totalPages = Math.ceil(data.count / limit);
 
@@ -90,8 +78,6 @@ exports.findPagination = (req, res) => {
       });
     });
 };
-
-
 
 // Find a single Statement with an id
 exports.findOne = (req, res) => {
