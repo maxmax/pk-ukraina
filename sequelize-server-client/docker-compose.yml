@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # Node.js/Express сервер
+  server:
+    container_name: pk-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    env_file:
+      - ./server/.env.production
+    command: npm run start:prod
+
+  # React/Vite.js клиент
+  client:
+    container_name: pk-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - '5173:5173'
+
+  # MySQL база данных
+  mysql:
+    container_name: mysql-db
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: pk_tigerprod
+      MYSQL_USER: tigerprod
+      MYSQL_PASSWORD: 123456
+    ports:
+      - '3307:3306'
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci

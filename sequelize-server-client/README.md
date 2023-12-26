@@ -11,6 +11,7 @@ pk-ukraina/sequelize-server-client/server/app/config/db.config.js
 ```bash
 npm install
 npm start
+npm run start:prod
 npm run dev
 ```
 
@@ -23,6 +24,44 @@ npm install
 npm run dev
 npm run build
 npm run preview
+```
+
+## Docker client only
+
+```bash
+docker build . -t "pk-client:v1.0"  
+docker run -p 5173:5173 pk-client:v1.0
+```
+
+## Docker server only
+
+```bash
+docker build -t pk-server .
+docker run -p 8080:8080 pk-server
+```
+
+## docker-compose.yml with client + server + mysql
+
+*Запустіть команду docker-compose up, щоб запустити всі сервіси, описані у файлі. Додайте опцію -d, якщо ви бажаєте запустити контейнери у фоновому режимі:*
+
+```bash
+docker-compose build
+```
+
+```bash
+docker-compose up
+```
+
+Або
+
+```bash
+docker-compose up -d
+```
+
+**Коли ви використовуєте docker-compose up --build, міграції будуть доступні у контейнері. (при розгортанні ми використовуємо міграції)!**
+
+```bash
+docker-compose up --build
 ```
 
 ### Technical task
