@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Node.js/Express сервер
+  # Node.js/Express server
   server:
     container_name: pk-server
     build:
@@ -11,9 +11,9 @@ services:
       - '8080:8080'
     env_file:
       - ./server/.env.production
-    command: npm run start:prod
+    command: npm run start:prod && sequelize db:migrate
 
-  # React/Vite.js клиент
+  # React/Vite.js client
   client:
     container_name: pk-client
     build:

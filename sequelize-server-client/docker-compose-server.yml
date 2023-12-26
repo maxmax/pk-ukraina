@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  # Node.js/Express server
+  server:
+    container_name: pk-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    env_file:
+      - ./server/.env.production
+
+  # React/Vite.js client
+  client:
+    container_name: pk-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - '5173:5173'
