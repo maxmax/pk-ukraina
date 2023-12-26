@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  # MySQL BD
+  mysql:
+    container_name: mysql-db
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: pk_tigerprod
+      MYSQL_USER: tigerprod
+      MYSQL_PASSWORD: 123456
+    ports:
+      - '3307:3306'
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci

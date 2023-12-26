@@ -30,7 +30,7 @@ class StatementStore {
       updateStatement: action.bound,
       setNotifications: action.bound,
     });
-    
+
     this.state = "none";
     this.statementsData = [];
     this.statementData = null;
@@ -64,18 +64,20 @@ class StatementStore {
       this.state = "done";
     } catch (error) {
       this.state = "error";
+      await this.setNotifications('Something went wrong!');
     }
   }
 
   // Отримуємо конкретну заявку за ідентифікатором
   async getStatement(id: number): Promise<void> {
     try {
-      this.state = "pending";
+      // this.state = "pending";
       const result = await performRequest<StatementProps>(`statements/${id}`, 'GET');
       this.statementData = result;
-      this.state = "done";
+      // this.state = "done";
     } catch (error) {
       this.state = "error";
+      await this.setNotifications('Something went wrong!');
     }
   }
 
@@ -89,6 +91,7 @@ class StatementStore {
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
       this.state = "error";
+      await this.setNotifications('Something went wrong!');
     }
   }
 
@@ -101,6 +104,7 @@ class StatementStore {
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
       this.state = "error";
+      await this.setNotifications('Something went wrong!');
     }
   }
 
@@ -114,6 +118,7 @@ class StatementStore {
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
       this.state = "error";
+      await this.setNotifications('Something went wrong!');
     }
   }
 }

@@ -55,12 +55,12 @@ function Statement({ statementStore }: StatementProps) {
   const setNew = useCallback(() => setNewDialog(true), [setNewDialog]);
 
   useEffect(() => {
-    const currentState = state === DONE || state === NONE;
-    const dataLoaded = statementsDataPagination && statementsDataPagination.statements.length > 0;
-    if (!dataLoaded && currentState) {
+    const shouldExecuteEffect = state !== DONE && state !== ERROR;
+    if (shouldExecuteEffect) {
       getStatementsPagination(page, pageSize);
     }
-  }, [getStatementsPagination, statementsDataPagination, state]);
+  }, [getStatementsPagination, statementsDataPagination, state, page, pageSize]);
+
 
   useEffect(() => {
     if (notifications) {
@@ -71,7 +71,7 @@ function Statement({ statementStore }: StatementProps) {
   return (
     <Container maxWidth="lg">
       {!!notifications &&
-        <Notification 
+        <Notification
           notifications={notifications}
           setNotifications={setNotifications}
         />
