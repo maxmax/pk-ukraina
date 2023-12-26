@@ -55,7 +55,7 @@ function Statement({ statementStore }: StatementProps) {
   const setNew = useCallback(() => setNewDialog(true), [setNewDialog]);
 
   useEffect(() => {
-    const currentState = state === DONE || state === ERROR || state === NONE;
+    const currentState = state === DONE || state === NONE;
     const dataLoaded = statementsDataPagination && statementsDataPagination.statements.length > 0;
     if (!dataLoaded && currentState) {
       getStatementsPagination(page, pageSize);
