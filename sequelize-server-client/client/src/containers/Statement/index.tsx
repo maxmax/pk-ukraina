@@ -1,5 +1,5 @@
 import { observer, inject } from 'mobx-react';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   Container,
   Typography,
@@ -56,7 +56,8 @@ function Statement({ statementStore }: StatementProps) {
 
   useEffect(() => {
     const shouldExecuteEffect = state !== DONE && state !== ERROR;
-    if (shouldExecuteEffect) {
+
+    if (shouldExecuteEffect && !statementsDataPagination) {
       getStatementsPagination(page, pageSize);
     }
   }, [getStatementsPagination, statementsDataPagination, state, page, pageSize]);

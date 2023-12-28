@@ -1,8 +1,8 @@
 import { observable, makeObservable, action } from 'mobx';
-import { performRequest, ApiResponse } from '../../utils/apiUtils'; // додаємо імпорт із нашої універсальної функції
+import { performRequest, ApiResponse } from '../../utils/apiUtils'; // add import from our universal function
 import { StatementProps, StatementDataPagination } from './types';
 
-// Оголошуємо клас для зберігання стану і виконання операцій з даними
+// Declare a class for storing state and performing data operations
 class StatementStore {
   state: "none" | "pending" | "done" | "error";
   statementsData: StatementProps[];
@@ -13,7 +13,7 @@ class StatementStore {
   pageSize: 5 = 5;
 
   constructor() {
-    // Ініціалізуємо поля класу і робимо їх спостережливими та додаємо дії
+    // Initialize the class fields and make them observable and add actions
     makeObservable(this, {
       state: observable,
       page: observable,
@@ -41,7 +41,6 @@ class StatementStore {
     this.notifications = value;
   }
 
-  // Отримуємо всі заявки, але взагалі вона нам уже не впала, потім її заберу
   async getStatements(): Promise<void> {
     try {
       this.state = "pending";
@@ -53,7 +52,6 @@ class StatementStore {
     }
   }
 
-  // Отримуємо заявкиз а нумерацією сторінок
   async getStatementsPagination(page: number, pageSize: number): Promise<void> {
     try {
       this.state = "pending";
@@ -68,7 +66,6 @@ class StatementStore {
     }
   }
 
-  // Отримуємо конкретну заявку за ідентифікатором
   async getStatement(id: number): Promise<void> {
     try {
       // this.state = "pending";
@@ -81,7 +78,6 @@ class StatementStore {
     }
   }
 
-  // Видаляємо заявку за ідентифікатором
   async deleteStatement(id: number): Promise<void> {
     try {
       this.state = "pending";
@@ -95,7 +91,6 @@ class StatementStore {
     }
   }
 
-  // Створюємо нову заявку
   async createStatement(data: StatementProps): Promise<void> {
     try {
       this.state = "pending";
@@ -108,7 +103,6 @@ class StatementStore {
     }
   }
 
-  // Оновлюємо існуючу заявку
   async updateStatement(data: StatementProps): Promise<void> {
     try {
       this.state = "pending";
@@ -123,7 +117,6 @@ class StatementStore {
   }
 }
 
-// Створюємо єдиний екземпляр класу для використання в додатку
 const statementStore = new StatementStore();
 
 export default statementStore;
