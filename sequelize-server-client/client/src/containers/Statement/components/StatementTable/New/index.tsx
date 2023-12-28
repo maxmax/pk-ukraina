@@ -7,6 +7,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 type NewProps = {
 	createStatement: Function;
+	setParentOpen: Function;
 };
 
 const defaultAttributes = {
@@ -25,7 +26,7 @@ const fieldLabels: Record<string, string> = {
   notes: 'Примітки',
 };
 
-const New: React.FC<NewProps> = ({ createStatement }) => {
+const New: React.FC<NewProps> = ({ createStatement, setParentOpen }) => {
   const [dataValue, setDataValue] = useState<Dayjs | null>(dayjs());
   const [attributes, setAttributes] = useState(defaultAttributes);
 
@@ -48,6 +49,7 @@ const New: React.FC<NewProps> = ({ createStatement }) => {
   const setCreateStatement = () => {
     createStatement(attributes);
     setAttributes(defaultAttributes);
+		setParentOpen(false);
   };
 
   return (

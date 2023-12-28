@@ -103,7 +103,7 @@ function Statement({ statementStore }: StatementProps) {
       <Footer />
       {newDialog && (
         <ModalDialog parentOpen={newDialog} setParentOpen={setNewDialog}>
-          <New createStatement={createStatement} />
+          <New createStatement={createStatement} setParentOpen={setNewDialog} />
         </ModalDialog>
       )}
     </Container>
