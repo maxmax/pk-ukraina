@@ -32,91 +32,92 @@ bun dev
 
 ![Edit](https://github.com/maxmax/pk-ukraina/raw/main/next-prisma-app/docs/edit.png)
 
-### Загальний опис, як усе працює
+### General Overview of How Everything Works
 
 **Main**
 
-Створюємо новий Next.js-проект із підтримкою TS за допомогою Create Next App:
+Creating a new Next.js project with TypeScript support using Create Next App:
 
 ~~~
 npm create next-app next-prisma-app --ts
 ~~~
 
-Встановлюємо мінімальний набір npm-пакетів, необхідних для роботи нашої програми:
+Installing the minimal set of npm packages required for our application to work:
 
-#### виробничі залежності
+#### Production dependencies
 
 ~~~
 npm install @emotion/cache @emotion/react @emotion/server @emotion/styled @formkit/auto-animate @mui/icons-material @mui/joy @mui/material @prisma/client @welldone-software/why-did-you-render argon2 cookie jsonwebtoken multer next-connect react-error-boundary react-toastify swiper swr
 ~~~
 
-#### залежності для розробки
+#### Dependencies for development
 
 ~~~
 npm install -D @types/cookie @types/jsonwebtoken @types/multer babel-plugin-import prisma sass
 ~~~
 
-+ @mui/... - компоненти та іконки Material UI;
-+ @emotion/... - рішення CSS-в-JS, яке використовується для стилізації компонентів Material UI;
-+ **prisma - ORM для роботи з реляційними БД PostgreSQL, MySQL, SQLite та SQL Server, а також з NoSQL-БД MongoDB і CockroachDB**;
-+ **@prisma/client - кліент Prisma**;
-+ @welldone-software/why-did-you-render - корисна утиліта для налагодження React-додатків, що дозволяє визначити причину повторного рендерингу компонента;
-+ argon2 - утиліта для хешування та перевірки паролів;
-+ cookie - утиліта для роботи з кукі;
-+ jsonwebtoken - утиліта до роботи з токенами;
-+ multer - посередник (middleware) Node.js для обробки multipart/form-data (для роботи з файлами, що містяться в запиті);
-+ next-connect - бібліотека, що дозволяє працювати з інтерфейсом роутів Next.js як з роутами Express;
-+ react-error-boundary - компонент-запобіжник для React-додатків;
-+ react-toastify - компонент та утиліта для реалізації повідомлень у React-додатках;
-+ *swiper - просунутий компонент слайдера - є одна ідея, але, можливо, я від неї відмовлюся*;
-+ swr - хуки React для запиту (отримання - fetching) даних від сервера, що дозволяють обійтися без інструменту управління станом (state manager);
-+ @types/... - відсутні типи TS;
-+ babel-plugin-import - плагін Babel для ефективної "трясіння дерева" (tree shaking) при імпорті компонентів MUI за назвою;
-+ sass - препроцесор CSS.
++ @mui/... - Material UI components and icons;
++ @emotion/... - CSS-in-JS solution used for styling Material UI components;
++ prisma - ORM for working with relational databases such as PostgreSQL, MySQL, SQLite, SQL Server, as well as NoSQL databases MongoDB and CockroachDB;
++ @prisma/client - Prisma client;
++ @welldone-software/why-did-you-render - a useful utility for debugging React applications that helps identify the reasons for component re-renders;
++ argon2 - utility for hashing and verifying passwords;
++ cookie - utility for working with cookies;
++ jsonwebtoken - utility for working with tokens;
++ multer - Node.js middleware for handling multipart/form-data (for working with files in the request);
++ next-connect - a library that allows working with Next.js route interface as with Express routes;
++ react-error-boundary - a React error boundary component for React applications;
++ react-toastify - component and utility for implementing notifications in React applications;
++ swiper - advanced slider component - it's an idea, but I might reconsider;
++ swr - React hooks for fetching data from the server, allowing to bypass the need for a state management tool;
++ @types/... - missing TypeScript types;
++ babel-plugin-import - Babel plugin for efficient tree shaking when importing MUI components by name;
++ sass - CSS preprocessor.
 
-### Підготовка БД та налаштування ORM
+### Database Preparation and ORM Configuration
 
-Для зберігання даних користувачів та відомостій нам потрібна БД. Для простоти будемо використовувати SQLite – у цій БД дані зберігаються у вигляді файлу на сервері. Для роботи з SQLite використовуватиметься Prisma. Пізніше ще підкинемо декілько БД, та запустимо все це у докері. Взагалі по БД буде ще окрема фіча та опис. 
+To store user data and information, we need a database. For simplicity, we will use SQLite, where data is stored as a file on the server. Prisma will be used to interact with SQLite. Later, we'll add a few more databases and run everything in Docker. Overall, there will be a separate feature and description for the databases.
 
-*Раджу встановити це [розширення](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) для VSCode для роботи зі схемою Prisma*
+*I recommend installing [this extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) for VSCode to work with the Prisma schema.*
 
-#### Инициализируем Prisma, находясь в корневой директории проекта:
+
+#### Initializing Prisma while in the project's root directory:
 
 ~~~
 npx prisma init
 ~~~
 
-Виконання цієї команди призводить до генерації директорії prisma і файлу .env. Редагуємо файл schema.prisma в директорії prisma, визначаючи провайдер для БД в блоці datasource і моделі користувача та моделі модель відомості. Тобто создаем модели в /schema.prisma.
+Executing this command generates the prisma directory and the .env file. Edit the schema.prisma file in the prisma directory, defining the database provider in the datasource block, and the user and information model in the model block. In other words, create models in /schema.prisma.
 
-Редагуємо файл .env, визначаючи в ньому шлях до файлу БД:
+Edit the .env file, specifying the path to the database file in it:
 
 ~~~
 DATABASE_URL="file:./dev.db"
 ~~~
 
-#### Створюємо та застосовуємо міграцію до БД:
+#### Creating and applying a migration to the database:
 
 ~~~
 npx prisma migrate dev --name init
 ~~~
 
-Виконання цієї команди призводить до генерації директорії migrations з міграцією на SQL.
+Executing this command generates the migrations directory with the SQL migration.
 
-Зверніть увагу: при першому виконанні migrate dev автоматично встановлюється та генерується клієнт Prisma. Надалі за будь-якої зміни схеми Prisma необхідно вручну виконувати команду 
+Note: When running migrate dev for the first time, the Prisma client is automatically installed and generated. In the future, after any changes to the Prisma schema, you need to manually execute the command
 
-~~~ 
-npx prisma generate 
-~~~ 
+~~~
+npx prisma generate
+~~~
 
-для оновлення клієнта.
+To update the client.
 
-Також зверніть увагу, що для швидкого відновлення вихідного стану БД зі втратою всіх даних можна видалити файл dev.db і виконати команду 
+Also, note that for a quick restoration of the initial state of the database with the loss of all data, you can delete the dev.db file and execute the command:
 
 ~~~
 npx prisma db push
 ~~~
 
-Залишилося налаштувати клієнта Prisma. Створюємо файл src/utils/prisma.ts наступного змісту:
+Now, let's set up the Prisma client. Create a file src/utils/prisma.ts with the following content:
 
 ~~~
 import { PrismaClient } from '@prisma/client'
@@ -136,35 +137,34 @@ if (process.env.NODE_ENV === 'production') {
 export default prisma
 ~~~
 
-Цей сніпет забезпечує існування тільки одного екземпляра (синглтона - singleton) клієнта Prisma при роботі як у виробничому середовищі, так і в середовищі для розробки. Справа в тому, що в режимі розробки через HMR при перезавантаженні модуля, що імпортує prisma, буде створюватися новий екземпляр клієнта.
+This snippet ensures the existence of only one instance (singleton) of the Prisma client when working in both a production and a development environment. The reason is that in development mode, due to HMR, a new instance of the client is created when the module importing Prisma is reloaded.
 
-#### Ми не будемо в документації детально розписувати процес реалізації, але деякі основні тези все ж таки опишемо
+#### We won't go into detail in the documentation about the implementation process, but we'll outline some key points.
 
-Наш додаток складатиметься з 2 сторінок: головної та **Відомості про рух носія** (У головному меню посилання з реалізованим тестовим завданням). 
-На головній сторінці будуть використовуватися статичні дані у форматі JSON. При цьому дані для головної сторінки зберігатимуться локально. Можна також ці дані реалізувати на сервері, але поки що ми цього робити не будемо, все це швидше для демонстрації.
+Our application will consist of two pages: the main page and **Statements** (with a link to the implemented test task in the main menu). The main page will use static data in JSON format. In this case, the data for the main page will be stored locally. You can also implement this data on the server, but for now, we won't do that; it's more for demonstration.
 
-Для головної сторінки реалізуємо статичну генерацію з даними за допомогою функції getStaticProps, можливо ми ще поговоримо про це згодом.
+For the main page, we'll implement static generation with data using the getStaticProps function. Perhaps we'll talk more about this later.
 
-### Аутентифікація та авторизація
+### Authentication and Authorization
 
 **Auth**
 
-Для аутентифікації та авторизації користувачів нашої програми ми скористаємося сучасною та однією з 'найбезпечніших схем' – JSON Web Tokens + Cookie. На найвищому рівні це означає таке:
+For the authentication and authorization of users in our program, we will use a modern and one of the 'most secure schemes' – JSON Web Tokens + Cookie. At the highest level, this means:
 
-+ для зберігання стану аутентифікації сервер генерує токен ідентифікації (idToken) на основі даних користувача (наприклад, його ID) та записує його в куки зі спеціальними налаштуваннями;
-+ на основі cookie із запиту користувача сервер визначає, чи зареєстрований користувач у додатку. Якщо користувач зареєстрований, сервер отримує ID користувача з токена ідентифікації, отримує дані користувача з БД і повертає їх клієнту;
-+ для доступа к защищенным ресурсам сервер генерирует токен доступа (accessToken) и возвращает его авторизованному клиенту;
-+ при доступе к защищенному ресурсу сервер проверяет наличие и валидность токена доступа из заголовка Authorization объекта запроса.
++ To store the authentication state, the server generates an identity token (idToken) based on user data (e.g., their ID) and stores it in a cookie with special settings.
++ Based on the cookie from the user's request, the server determines whether the user is registered in the application. If the user is registered, the server obtains the user's ID from the identity token, retrieves user data from the database, and returns it to the client.
++ To access protected resources, the server generates an access token (accessToken) and returns it to the authorized client.
++ When accessing a protected resource, the server checks the presence and validity of the access token from the Authorization header of the request object.
 
-#### Посередники та утиліти авторизації
+#### Middleware and Authorization Utilities
 
-Реалізуємо 2 посередники та 1 утиліту авторизації:
+Let's implement 2 middlewares and 1 authorization utility:
 
-+ cookie - посередник для роботи з кукі;
-+ authGuard – посередник для надання доступу до захищених ресурсів;
-+ checkFields – утиліта для перевірки наявності обов'язкових полів у тілі запиту.
++ cookie - middleware for working with cookies;
++ authGuard – middleware for providing access to protected resources;
++ checkFields – utility for checking the presence of mandatory fields in the request body.
 
-**Почнемо з визначення змінних для cookie у файлі .env:**
+**Let's start by defining variables for cookies in the .env file:**
 
 ~~~
 ID_TOKEN_SECRET="id-token-secret"
@@ -172,7 +172,7 @@ ACCESS_TOKEN_SECRET="access-token-secret"
 COOKIE_NAME="uid"
 ~~~
 
-*Зверніть увагу: у реальному додатку секрети мають бути довгими довільно згенерованими рядками.
+*Note: In a real application, secrets should be long, randomly generated strings..
 
 ~~~
 import { NextApiHandlerWithCookie } from '@/types'
@@ -186,7 +186,7 @@ const handler: NextApiHandlerWithCookie = async (req, res) => {
 export default cookies(handler)
 ~~~
 
-Визначаємо типи для посередника authGuard у файлі src/types.ts:
+Define types for the authGuard middleware in the src/types.ts file:
 
 ~~~
 export type NextApiRequestWithUserId = NextApiRequest & {
@@ -203,93 +203,93 @@ export type AuthGuardMiddleware = (
 ) => (req: NextApiRequestWithUserId, res: NextApiResponse) => void
 ~~~
 
-**Визначаємо посередника для надання доступу до захищених ресурсів у файлі utils/authGuard.ts:**
+**Defining a middleware to grant access to protected resources in the utils/authGuard.ts file:**
 
-**Нарешті визначаємо утиліту для перевірки наявності обов'язкових полів у тілі запиту у файлі utils/checkFields.ts:**
+**Finally, defining a utility to check for the presence of mandatory fields in the request body in the utils/checkFields.ts file:**
 
-*Гадаю, тут усе зрозуміло.*
+*I think everything is clear here. 🐅?*
 
-#### Роути аутентифікації та авторизації
+#### Authentication and Authorization Routes
 
-Інтерфейси роутів визначаються в директорії pages/api та доступні за адресою /api/*.
+Route interfaces are defined in the pages/api directory and are available at /api/*.
 
-Створюємо в ній директорію auth з файлами register.ts та login.ts.
+Create a directory named auth in it with files register.ts and login.ts.
 
-**Та визначаємо роут для реєстрації register.ts.**
+**And define the route for registration in register.ts.**
 
-Ми генеруємо токен доступу з тривалим терміном життя. Це позбавляє нас необхідності його продовження (генерації нового токена) в посереднику authGuard, наприклад. Але це небезпечно, тому у виробничому додатку термін життя токена доступу має становити приблизно 1 годину. Також у реальному додатку має бути передбачений механізм автоматичного продовження токена ідентифікації: у нашому додатку користувач повинен виконувати вхід до системи один раз на тиждень.
+We generate an access token with a long lifespan. This eliminates the need to renew it (generate a new token) in the authGuard middleware, for example. However, this is risky, so in a production application, the access token's lifespan should be approximately 1 hour. Also, a real application should have a mechanism for automatic extension of the identification token: in our application, the user should log in once a week.
 
-**Визначаємо роут для авторизації: login.ts**
+**Define the route for authorization: login.ts**
 
-Створюємо файл auth/user.ts для роуту визначення стану аутентифікації та отримання даних користувача.
+Create a file auth/user.ts for the route to define the authentication status and retrieve user data.
 
-**Визначаємо роут для auth/logout.ts**
-Нарешті, визначаємо роут для виходу користувача із системи у файлі auth/logout.ts
+**Define the route for auth/logout.ts**
+Finally, define the route for the user to log out in the auth/logout.ts file.
 
-*Таким чином, ми реалізували 4 маршрути аутентифікації та авторизації:*
+*Thus, we have implemented 4 authentication and authorization routes:*
 
-+ POST /api/register - для реєстрації користувача;
-+ POST /api/login - для входу користувача в систему;
-+ GET /api/user - для отримання даних зареєстрованого користувача;
-+ GET /api/logout - для виходу користувача із системи.
+* POST /api/register - for user registration;
+* POST /api/login - for user login to the system;
+* GET /api/user - for retrieving data of the registered user;
+* GET /api/logout - for user logout from the system.
 
-#### Завантаження файлів
+#### File Upload
 
-Користувачі нашого додатка отримають можливість завантажити аватари. Отже, нам необхідно реалізувати маршрут для збереження файлів на сервері. Для роботи з файлами із запиту зазвичай використовується Multer.
+Users of our application will have the ability to upload avatars. Therefore, we need to implement a route for saving files on the server. Multer is commonly used to work with files in a request.
 
-*Зверніть увагу: для реалізації всіх наступних роутів використовуватиметься next-connect.*
+*Note: Next-connect will be used for implementing all the following routes.*
 
-Створюємо в директорії api файл upload.ts
-*Цей роут доступний за адресою /api/upload за допомогою POST.*
+Create a file upload.ts in the api directory.
+*This route is accessible at /api/upload via POST.*
 
-*Слід зазначити, що у нашій реалізації не вистачає логіки видалення старих аватарів користува: назва файлу складається з ID користувача і розширення файлу, тобто. один користувач може мати кілька файлів із різними розширеннями. Це стосується лише файлів на сервері, поле avatarUrl завжди міститиме посилання на останній завантажений файл. Також у реальному додатку має сенс визначити логіку для зменшення розміру файлу, що завантажується, наприклад, шляхом його стиснення.*
+*It should be noted that our implementation lacks logic for deleting old user avatars: the file name consists of the user ID and the file extension, meaning one user can have multiple files with different extensions. This only applies to files on the server; the avatarUrl field will always contain a link to the last uploaded file. Also, in a real application, it makes sense to define logic for reducing the size of the uploaded file, for example, by compressing it.*
 
-### CRUD-операції для Відомості про рух носія
+### CRUD Operations for Statements
 
-Серверна частина нашої програми готова. Залишилося реалізувати роути для додавання, редагування та видалення.
+The server-side of our program is ready. Now we need to implement routes for adding, editing, and deleting.
 
-Зверніть увагу: всі наступні роути захищені.
+Note: All the following routes are protected.
 
-Також зверніть увагу на те, що роути для отримання всіх Відомостей та однієї Відомості за ID будуть реалізовані на клієнті (серверної логіки на клієнті) за допомогою функції getServerSideProps.
+Also, note that routes for fetching all statements and one statement by ID will be implemented on the client side (client-side logic) using the getServerSideProps function.
 
-**Створюємо в директорії api файл statement.ts.**
+**Create a file statement.ts in the api directory.**
 
-У всіх випадках у відповідь на запит повертаються дані відомості.
+In all cases, the response to the request includes statement data.
 
-Таким чином, у нас є 3 роути для Відомостей:
+So, we have 3 routes for Statements:
 
-+ POST /api/statement - для створення посту;
-+ PUT /api/statement - для оновлення посту;
-+ DELETE /api/statement?id=<post-id> - для видалення посту.
+* POST /api/statement - to create a statement;
+* PUT /api/statement - to update a statement;
+* DELETE /api/statement?id=<post-id> - to delete a statement.
 
-**Також визначаємо деякі заголовки HTTP, пов'язані з безпекою, у next.config.js для всіх роутів**
+**Also, define some security-related HTTP headers in next.config.js for all routes.**
 
-## Клієнт
+## Client
 
-*Налаштування проекту*
+*Project Configuration*
 
-[Why Did You Render](https://github.com/welldone-software/why-did-you-render) – утиліта для налагодження React-додатків, що дозволяє визначити причину повторного рендерингу компонента. Для того, щоб мати можливість використовувати цю утиліту в Next.js-додатку, необхідно зробити 2 речі:
+[Why Did You Render](https://github.com/welldone-software/why-did-you-render) – a utility for debugging React applications that allows identifying the reason for component re-rendering. To use this utility in a Next.js application, you need to do two things:
 
-+ налаштувати пресет (preset) транспілятора Babel;
-+ ініціалізувати утиліту та імпортувати її в основний компонент програми.
++ Configure the Babel transpiler preset;
++ Initialize the utility and import it into the main program component.
 
-Налаштовуємо пресет Babel у файлі babel.config.js у корені проекту:
+Configure the Babel preset in the babel.config.js file at the project's root:
 
 ~~~
 module.exports = function (api) {
   const isServer = api.caller((caller) => caller?.isServer)
   const isCallerDevelopment = api.caller((caller) => caller?.isDev)
 
-  // пресети
+  // presets
   const presets = [
     [
       'next/babel',
       {
         'preset-react': {
           runtime: 'automatic',
-          importSource:
-            // код wdyr повинен виконуватися лише на клієнті
-            // і лише у режимі розробки
+          importSource:          
+            // The wdyr code should only run on the client
+            // and only in development mode
             !isServer && isCallerDevelopment
               ? '@welldone-software/why-did-you-render'
               : 'react'
@@ -302,13 +302,13 @@ module.exports = function (api) {
 }
 ~~~
 
-**Ініціалізуємо WDYR у файлі utils/wdyr.ts:**
+**Initialize WDYR in the utils/wdyr.ts file:**
 
 ~~~
 import React from 'react'
 
-// код виконується лише у режимі розробки
-// і лише на клієнті
+// Code executed only in development mode
+// and only on the client side
 if (process.env.NODE_ENV === 'development' && typeof document !== 'undefined') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render')
   whyDidYouRender(React, {
@@ -319,13 +319,13 @@ if (process.env.NODE_ENV === 'development' && typeof document !== 'undefined') {
 export {}
 ~~~
 
-Імпортуємо WDYR у файлі _app.tsx:
+Import WDYR in the _app.tsx file:
 
 ~~~
 import '@/utils/wdyr'
 ~~~
 
-Після цього для налагодження у файлі компонента достатньо додати такий рядок:
+After this, to enable it in the component file, it is sufficient to add the following line:
 
 ~~~
 SomeComponent.whyDidYouRender = true
@@ -333,19 +333,19 @@ SomeComponent.whyDidYouRender = true
 
 ##### Material UI
 
-Material UI – найпопулярніша бібліотека компонентів React. Для її правильного використання в Next.js-додатку необхідно зробити 2 речі:
+Material UI is the most popular React component library. To use it correctly in a Next.js application, you need to do two things:
 
-+ налаштувати плагін (plugin) Babel;
-+ налаштувати кеш Emotion - рішення CSS-в-JS, яке використовується MUI для стилізації компонентів.
++ Configure the Babel plugin.
++ Configure the Emotion cache - a CSS-in-JS solution used by MUI for styling components.
 
-Та налаштовуємо плагін Babel у файлі babel.config.js
+Let's configure the Babel plugin in the babel.config.js file:
 
 ~~~
 module.exports = function (api) {
-  // Пресети
+  // Presets
   // ...
 
-  // плагіни
+  // Plugins
   const plugins = [
     [
       'babel-plugin-import',
@@ -362,32 +362,34 @@ module.exports = function (api) {
 }
 ~~~
 
-Навіщо потрібен цей плагін? Для зменшення розміру клієнтського складання. Проблема в тому, що під час імпорту компонента MUI за назвою, наприклад:
+**Why do we need this plugin? To reduce the size of the client bundle. The problem is that when importing an MUI component by name, for example:**
 
 ~~~
 import { Button } from '@mui/material'
 ~~~
 
-У складання потрапить весь пакет @mui/material, тобто. всі компоненти MUI незалежно від того, використовуються вони у додатку чи ні. babel-plugin-import перетворює іменований імпорт на дефолтний, тобто. на виході ми отримуємо, наприклад:
+The entire @mui/material package, i.e., all MUI components, regardless of whether they are used in the application or not, will end up in the bundle. babel-plugin-import transforms named imports into default ones, so, for example, we get:
 
 ~~~
 import Button from '@mui/material/Button'
 ~~~
 
-Таким чином, у складання потрапляють лише компоненти, що використовуються у додатку.
+This way, only the components used in the application end up in the bundle.
 
-Налаштування кешу Emotion необхідне для запобігання спалаху нестилізованого контенту (flash of unstyled content), наприклад, коли спочатку завантажуються дефолтні стилі браузера і тільки потім стилі MUI, а також забезпечення можливості легкої перезапису стилів MUI, тобто. кастомізації компонентів
+Configuring the Emotion cache is necessary to prevent a flash of unstyled content, for example, when default browser styles are loaded initially and only then the MUI styles. It also provides the ability to easily override MUI styles, i.e., customize components.
 
-**Визначаємо утиліту для створення кешу Emotion у файлі**
+*Let's define a utility for creating the Emotion cache in the file*
+
+**Defining the utility for creating the Emotion cache in the file**
 
 + utils/createEmotionCache.ts
 
 ~~~
 import createCache from '@emotion/cache'
 
-// Створюємо на клієнті тег `meta` з `name="emotion-insertion-point"` на початку <head>.
-// Це дозволяє завантажувати стилі MUI у першочерговому порядку.
-// Це також дозволяє розробникам легко перезаписувати стилі MUI, наприклад, за допомогою модулей CSS.
+// Create a `meta` tag with `name="emotion-insertion-point"` at the beginning of <head> on the client.
+// This allows loading MUI styles in a prioritized order.
+// It also enables developers to easily override MUI styles, for example, using CSS modules.
 
 export default function createEmotionCache() {
   let insertionPoint
@@ -403,66 +405,69 @@ export default function createEmotionCache() {
 }
 ~~~
 
-Кеш необхідно створювати під час запуску програми як на сервері, так і на клієнті.
+The cache needs to be created during the program's execution, both on the server and the client.
 
-+ Налаштовуємо рендеринг документа у файлі _document.tsx (створення кешу на сервері):
-+ Налаштовуємо рендеринг компонентів у файлі _app.tsx (створення кешу на клієнті):
++ Configure document rendering in the file _document.tsx (creating the cache on the server).
++ Configure component rendering in the file _app.tsx (creating the cache on the client).
 
-#### Формування структури компонентів
+#### Structuring Components
 
-У нашому додатку використовуватиметься декілька "глобальних" компонентів:
+Our application will utilize several "global" components:
 
-+ компонент повідомлень (react-toastify);
-+ запобіжник (react-error-boundary).
++ Notification component (react-toastify)
++ Error boundary component (react-error-boundary)
 
-У нас буде загальний макет (layout) для всіх сторінок програми. Ми сформуємо його прямо у _app.tsx.
+We will have a common layout for all pages of the application, and we will structure it directly in _app.tsx.
 
-Крім того, ми будемо анімувати перехід між сторінками за допомогою @formkit/auto-animate (цю утиліту можна розглядати як сучасну альтернативу React Transition Group).
+Additionally, we will animate the transition between pages using @formkit/auto-animate (consider this utility as a modern alternative to React Transition Group).
 
-Імпортуємо компоненти та стилі, та формуємо структуру компонентів в _app.tsx
+Importing components and styles, let's structure the components in _app.tsx.
 
-+ Додаємо компонент для додавання метаданих до розділу head документа (components/head.tsx)
-+ Резервний компонент (components/ErrorFallback.tsx)
-+ Підвал сайту (components/Footer.tsx)
-+ Шапка сайтy (components/Header.tsx)
-+ Десктопне меню (components/Menu/Desktop.tsx): *Даний компонент є список посилань і кнопку профілю.*
-+ Мобільне меню (components/Menu/Mobile.tsx)
++ Add a component to add metadata to the head section of the document (components/head.tsx)
++ Fallback component (components/ErrorFallback.tsx)
++ Website footer (components/Footer.tsx)
++ Website header (components/Header.tsx)
++ Desktop menu (components/Menu/Desktop.tsx): *This component is a list of links and a profile button.*
++ Mobile menu (components/Menu/Mobile.tsx)
 
-#### Аутентифікація, авторизація та завантаження файлів
+#### Authentication, Authorization, and File Upload
 
-Під час запуску програма запитує у сервера дані користувача. Це єдині дані, за зміною яких "спостерігає" додаток. Запит даних користувача реалізовано за допомогою SWR. SWR дозволяє кешувати дані та мутувати їх за потреби, наприклад, після реєстрації користувача. Завдяки SWR ми можемо обійтися без інструменту управління станом програми (state manager).
+Upon startup, the program requests user data from the server. These are the only data the application "observes" when changed. User data retrieval is implemented using SWR. SWR allows caching data and mutating it as needed, for example, after user registration. Thanks to SWR, we can manage without a state management tool.
 
-- Визначаємо абстракцію над SWR для отримання даних користувача у файлі utils/swr.ts:
+- Define an abstraction over SWR for fetching user data in the file utils/swr.ts:
 
-#### Аутентификация и авторизация
+#### Authentication and Authorization
 
-- У шапці сайті є кнопка профілю (Buttons/Profile.tsx)
+- In the website header, there is a profile button (Buttons/Profile.tsx)
 
-- Функціонал реєстрації, авторизації, завантаження аватарів та виходу із системи інкапсульований у модальному вікні (components/Modal.tsx):
+- The functionality of registration, authentication, avatar uploads, and logout is encapsulated in a modal window (components/Modal.tsx):
 
-- За відсутності даних користувача вмістом модалки є вкладки аутентифікації (components/AuthTabs.tsx):
+- In the absence of user data, the content of the modal consists of authentication tabs (components/AuthTabs.tsx):
 
-- Форма реєстрації (components/Forms/Register.tsx):
+- Registration form (components/Forms/Register.tsx):
 
-#### Панель користувача
+#### User Panel
 
-За наявності даних користувача вмістом модалки, яка рендерується при натисканні кнопки профілю, є панель користувача (components/UserPanel.tsx), що містить форму для завантаження аватара і кнопку для виходу користувача з системи:
+If user data is available, the content of the modal that renders upon clicking the profile button is the User Panel (components/UserPanel.tsx), which includes a form for uploading an avatar and a button for user logout:
 
-- Форма завантаження аватара (components/Forms/Upload.tsx):
-- Кнопка для виходу із системи (components/Buttons/Logout.tsx):
-*Після завантаження аватар користувача відображається у шапці сайті на місці кнопки профілю.*
+- Avatar upload form (components/Forms/Upload.tsx)
+- Logout button (components/Buttons/Logout.tsx)
 
-#### Створення, оновлення, видалення відомостей
+*After uploading the avatar, the user's profile picture is displayed in the website header in place of the profile button.*
 
-Для створення сторінки "Відомості про рух носія" та детальних сторінок використовується рендеринг на стороні сервера за допомогою функції getServerSideProps. Ця функція дозволяє виконувати серверний код і викликатиметься при кожному запиті сторінки.
+#### Creating, Updating, Deleting Statements
 
-На сторінці "Відомості про рух носія" (pages/statement/index.tsx) рендерується кнопка для створення нової відомості та її список у вигляді таблиці (за наявності):
+To create the "Carrier Movement Information" page and detailed pages, server-side rendering is used with the help of the getServerSideProps function. This function allows executing server-side code and will be called with each page request.
 
-- Кнопка створення відомості (components/Button/CreateStatement.tsx)
-- Форма створення відомості (components/Forms/CreateStatement.tsx)
-- Сторінка відомості (pages/statement/[id].tsx)
-- Кнопка видалення відомості (components/Buttons/RemoveStatement.tsx)
-- Кнопка редагування відомості (components/Buttons/EditStatement.tsx)
-*При натисканні цієї кнопки мода рендерується з формою для редагування відомості (components/Forms/EditStatement.tsx), яка майже ідентична формі створення посту.*
+On the "Carrier Movement Information" page (pages/statement/index.tsx), a button for creating a new statement and its list in the form of a table (if available) are rendered:
 
-**Із загальним описом функціоналу ми поки що закінчили:)**
+* Create statement button (components/Button/CreateStatement.tsx)
+* Statement creation form (components/Forms/CreateStatement.tsx)
+* Statement page (pages/statement/[id].tsx)
+* Delete statement button (components/Buttons/RemoveStatement.tsx)
+* Edit statement button (components/Buttons/EditStatement.tsx)
+
+*Upon clicking this button, a modal is rendered with a form for editing the statement (components/Forms/EditStatement.tsx), which is almost identical to the post creation form.*
+
+
+**With a general description of the functionality, we conclude for now, reducing the irony level to 0.5% 🗿🗿🗿, and wish everyone a good day.**
