@@ -5,8 +5,8 @@
 NodeJs, sequelize, mysql
 
 pk-ukraina/sequelize-server-client/server/app/config/db.config.js
-*Підключіть базу даних [mysql] або яка вам більше подобається*
-*Sequelize – це ORM для роботи з такими реляційними базами даних як Postgres, MySQL, MariaDB, SQLite та MSSQL.*
+*Connect the database [mysql] or any other you prefer.*
+*Sequelize is an ORM for working with relational databases such as Postgres, MySQL, MariaDB, SQLite, and MSSQL.*
 
 ```bash
 npm install
@@ -41,7 +41,7 @@ docker run -p 8080:8080 pk-server
 ```
 
 ## docker-compose
-*Cтворимо два docker-compose один для БД, другий для сервер і клієнт, щоб не мати прив'язки до БД очікування її готовності до міграцій і так далі*
+*Let's create two docker-compose files: one for the database and another one for the server and client, so we won't have a dependency on the database, waiting for its readiness for migrations, etc.*
 
 ## docker-compose-mysql.yml
 
@@ -57,9 +57,9 @@ docker-compose -f docker-compose-server.yml up
 
 ## docker-compose.yml with client + server + mysql
 
-*Запустіть команду docker-compose up, щоб запустити всі сервіси, описані у файлі. Додайте опцію -d, якщо ви бажаєте запустити контейнери у фоновому режимі:*
+*Run the command docker-compose up to start all the services described in the file. Add the -d option if you want to run the containers in the background.*
 
-*Але в цього варіанта є свій недолік, тому що треба або перезапустити "pk-client" вручну так як БД може бути ще не готове, або дописати docker-compose таким чином, щоб pk-client стартував вже після того, як БД готова до використання та виконав усі потрібні нам міграції, можна було додати додаткові скрипти очікування, перевірки готовності, але це все такий собі процес! За певних умов я б так і зробив, але розумніший варіант використовувати два окремих контейнери, описаних вище.*
+*However, this approach has its drawback because you either need to restart "pk-client" manually since the database may not be ready, or modify the docker-compose file so that pk-client starts only after the database is ready for use and has executed all the necessary migrations. Additional scripts for waiting and readiness checks can be added, but it is a somewhat cumbersome process! Under certain conditions, I would do it this way, but a smarter option is to use two separate containers as described above.*
 
 ```bash
 docker-compose build
@@ -75,7 +75,7 @@ docker-compose up
 docker-compose up -d
 ```
 
-**Коли ви використовуєте docker-compose up --build, міграції будуть доступні у контейнері. (при розгортанні ми використовуємо міграції)!**
+**When you use docker-compose up --build, migrations will be available in the container. (We use migrations during deployment)!**
 
 ```bash
 docker-compose up --build
@@ -89,13 +89,11 @@ docker-compose up --build
 
 ![Technical task](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/postman.png)
 
-
-
 ### Get Table
 
 ![Get Table](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/get.png)
 
-### Get Table + pagination on client only
+### Get Table + pagination (on server side)
 
 ![Get Table](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/get-pagination.png)
 
