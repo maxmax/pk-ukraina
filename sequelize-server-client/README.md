@@ -81,6 +81,13 @@ docker-compose up -d
 docker-compose up --build
 ```
 
+## docker-compose-postgres.yml
+
+```bash
+docker-compose -f docker-compose-postgres.yml up
+```
+*reconfigure .env production*
+
 ### Technical task
 
 ![Technical task](https://github.com/maxmax/pk-ukraina/raw/main/sequelize-server-client/docs/tz.png)
