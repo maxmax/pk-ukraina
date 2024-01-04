@@ -87,11 +87,11 @@ docker-compose up --build
 docker-compose -f docker-compose-postgres.yml up
 ```
 
+*reconfigure with .env.production.postgres on production*
+
 ```bash
 docker-compose -f docker-compose-server-pg.yml up
 ```
-
-*reconfigure with .env.production.postgres on production*
 
 ### Technical task
 

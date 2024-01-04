@@ -1,19 +1,24 @@
 import { observable, makeObservable, action } from 'mobx';
-import { performRequest, ApiResponse } from '../../utils/apiUtils'; // add import from our universal function
+import { performRequest, ApiResponse } from '../../utils/apiUtils';
 import { StatementProps, StatementDataPagination } from './types';
 
-// Declare a class for storing state and performing data operations
+enum StatementStoreState {
+  None = "none",
+  Pending = "pending",
+  Done = "done",
+  Error = "error",
+}
+
 class StatementStore {
-  state: "none" | "pending" | "done" | "error";
+  state: StatementStoreState;
   statementsData: StatementProps[];
   statementData: StatementProps | null;
   statementsDataPagination: StatementDataPagination | null | undefined;
   notifications: string | null;
-  page: 1 = 1;
-  pageSize: 5 = 5;
+  page: number = 1;
+  pageSize: number = 5;
 
   constructor() {
-    // Initialize the class fields and make them observable and add actions
     makeObservable(this, {
       state: observable,
       page: observable,
@@ -31,7 +36,7 @@ class StatementStore {
       setNotifications: action.bound,
     });
 
-    this.state = "none";
+    this.state = StatementStoreState.None;
     this.statementsData = [];
     this.statementData = null;
     this.notifications = null;
@@ -43,76 +48,74 @@ class StatementStore {
 
   async getStatements(): Promise<void> {
     try {
-      this.state = "pending";
+      this.state = StatementStoreState.Pending;
       const result = await performRequest<StatementProps[]>('statements', 'GET');
       this.statementsData = result;
-      this.state = "done";
+      this.state = StatementStoreState.Done;
     } catch (error) {
-      this.state = "error";
+      this.state = StatementStoreState.Error;
     }
   }
 
   async getStatementsPagination(page: number, pageSize: number): Promise<void> {
     try {
-      this.state = "pending";
+      this.state = StatementStoreState.Pending;
       const result = await performRequest<StatementDataPagination>(`statements/pagination?page=${page}&pageSize=${pageSize}`, 'GET');
       this.statementsDataPagination = result;
-      this.page = result.currentPage as any; // тут просто в лом зараз фіксувати по нормальному, потім поправимо типу технічний борг хаха
-      this.pageSize = result.pageSize as any;
-      this.state = "done";
+      this.page = result.currentPage;
+      this.pageSize = result.pageSize;
+      this.state = StatementStoreState.Done;
     } catch (error) {
-      this.state = "error";
       await this.setNotifications('Something went wrong!');
+      this.state = StatementStoreState.Error;
     }
   }
 
   async getStatement(id: number): Promise<void> {
     try {
-      // this.state = "pending";
       const result = await performRequest<StatementProps>(`statements/${id}`, 'GET');
       this.statementData = result;
-      // this.state = "done";
     } catch (error) {
-      this.state = "error";
       await this.setNotifications('Something went wrong!');
+      this.state = StatementStoreState.Error;
     }
   }
 
   async deleteStatement(id: number): Promise<void> {
     try {
-      this.state = "pending";
+      this.state = StatementStoreState.Pending;
       const result = await performRequest<ApiResponse>(`statements/${id}`, 'DELETE');
       await this.setNotifications(result.message);
       this.statementData = null;
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
-      this.state = "error";
       await this.setNotifications('Something went wrong!');
+      this.state = StatementStoreState.Error;
     }
   }
 
   async createStatement(data: StatementProps): Promise<void> {
     try {
-      this.state = "pending";
+      this.state = StatementStoreState.Pending;
       const result = await performRequest<ApiResponse>('statements', 'POST', data);
       await this.setNotifications("New request created!");
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
-      this.state = "error";
       await this.setNotifications('Something went wrong!');
+      this.state = StatementStoreState.Error;
     }
   }
 
   async updateStatement(data: StatementProps): Promise<void> {
     try {
-      this.state = "pending";
+      this.state = StatementStoreState.Pending;
       const result = await performRequest<ApiResponse>(`statements/${data.id}`, 'PUT', data);
       await this.setNotifications(result.message);
       this.statementData = null;
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
-      this.state = "error";
       await this.setNotifications('Something went wrong!');
+      this.state = StatementStoreState.Error;
     }
   }
 }
