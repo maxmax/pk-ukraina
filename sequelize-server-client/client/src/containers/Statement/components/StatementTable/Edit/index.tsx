@@ -1,8 +1,8 @@
 import { useState, useEffect, ChangeEvent } from 'react';
-import { 
-  Box, 
-  TextField, 
-  Typography, 
+import {
+  Box,
+  TextField,
+  Typography,
   Button,
   Stack,
 } from '@mui/material';
@@ -15,15 +15,13 @@ import { StatementProps } from '../../../types';
 
 type DataTypes = {
   statementData: StatementProps;
-  // updateStatement: (attributes: StatementProps) => void;
-  // deleteStatement: (id: number) => void;
-	updateStatement: Function;
-  deleteStatement: Function;
+	updateStatement: (data: StatementProps) => Promise<void>;
+  deleteStatement: (id: number) => Promise<void>;
 }
 
-export default function Edit({ 
-  statementData, 
-  updateStatement, 
+export default function Edit({
+  statementData,
+  updateStatement,
   deleteStatement
 }: DataTypes) {
   const [dataValue, setDataValue] = useState<Dayjs | null>(dayjs(statementData.dateReceiving));
@@ -79,11 +77,11 @@ export default function Edit({
         {'Редагувати'}
       </Typography>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker 
+        <DatePicker
           label="Дата отримання"
-          value={dataValue} 
+          value={dataValue}
           format="DD/MM/YYYY"
-          onChange={(newValue) => setDataValue(newValue)} 
+          onChange={(newValue) => setDataValue(newValue)}
         />
       </LocalizationProvider>
       {filteredKeys.map((field) => (

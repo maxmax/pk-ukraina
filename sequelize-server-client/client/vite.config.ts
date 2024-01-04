@@ -1,6 +1,7 @@
-import { resolve } from 'path'
-import { defineConfig, loadEnv } from 'vite'
-import react from '@vitejs/plugin-react'
+import { resolve } from 'path';
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
+import eslintPlugin from 'vite-plugin-eslint';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -11,7 +12,10 @@ export default defineConfig(({ mode }) => {
 
   return {
     base: VITE_BASE,
-    plugins: [react()],
+    plugins: [
+      react(),
+      eslintPlugin()
+    ],
     preview: {
       port: 5173,
       strictPort: true,

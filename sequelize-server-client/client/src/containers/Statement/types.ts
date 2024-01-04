@@ -18,6 +18,14 @@ export type StatementDataPagination = {
   statements: StatementProps[];
 };
 
+export type NewStatementProps = {
+	diskNumber: string;
+	outputName: string;
+	inputName: string;
+	deedNumber: string;
+	notes: string;
+}
+
 export type StatementStoreProps = {
   state: string;
   page: number;
@@ -25,12 +33,12 @@ export type StatementStoreProps = {
   statementsData: StatementProps[];
   statementData: StatementProps;
   statementsDataPagination: StatementDataPagination;
-  getStatements: Function;
-  getStatementsPagination: Function;
-  getStatement: Function;
-  deleteStatement: Function;
-  createStatement: Function;
-  updateStatement: Function;
+  getStatements: () => Promise<void>;
+  getStatementsPagination: (page: number, pageSize: number) => Promise<void>;
+  getStatement: (id: number) => Promise<void>;
+  deleteStatement: (id: number) => Promise<void>;
+  createStatement: (data: NewStatementProps) => Promise<void>;
+  updateStatement: (data: StatementProps) => Promise<void>;
   notifications: string;
-  setNotifications: Function;
+  setNotifications: (value: string | null) => void;
 };

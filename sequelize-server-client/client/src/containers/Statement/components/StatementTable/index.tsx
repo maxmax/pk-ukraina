@@ -34,17 +34,15 @@ const tableStyles = {
 };
 
 type StatementsProps = {
-  statements: StatementProps[];
-  getStatement: Function;
-  updateStatement: Function;
-  deleteStatement: Function;
+  getStatement: (id: number) => Promise<void>;
+  updateStatement: (data: StatementProps) => Promise<void>;
+  deleteStatement: (id: number) => Promise<void>;
   statementData: StatementProps;
   statementsDataPagination: StatementDataPagination;
-  getStatementsPagination: Function;
+  getStatementsPagination: (page: number, pageSize: number) => Promise<void>;
 };
 
 const StatementTable: React.FC<StatementsProps> = ({
-  statements,
   getStatement,
   updateStatement,
   deleteStatement,

@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 type NotificationProps = {
 	notifications: string;
-	setNotifications: Function;
+	setNotifications: (value: string | null) => void;
 }
 
 export default function Notification({ notifications, setNotifications }: NotificationProps) {

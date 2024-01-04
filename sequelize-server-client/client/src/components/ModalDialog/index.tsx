@@ -7,16 +7,12 @@ import CloseIcon from '@mui/icons-material/Close';
 type ModalDialogProps = {
   children: React.ReactNode
   parentOpen?: boolean;
-  setParentOpen?: Function;
+  setParentOpen?: (value: boolean) => void;
 };
 
 export default function ModalDialog({ children, parentOpen, setParentOpen }: ModalDialogProps) {
 
   const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);
