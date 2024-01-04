@@ -1,5 +1,5 @@
+import { useEffect, useState, useCallback } from 'react';
 import { observer, inject } from 'mobx-react';
-import { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   Container,
   Typography,
@@ -16,11 +16,10 @@ import New from './components/StatementTable/New';
 
 import { StatementStoreProps } from './types';
 
-type StatementState = 'pending' | 'done' | 'error' | 'none';
+type StatementState = 'pending' | 'done' | 'error';
 const PENDING: StatementState = 'pending';
 const DONE: StatementState = 'done';
 const ERROR: StatementState = 'error';
-const NONE: StatementState = 'none';
 
 const centerStyles = { display: 'flex', alignItems: 'center', justifyContent: 'center' };
 const gridStyles = { mt: 4, display: 'grid', alignItems: 'center', justifyContent: 'center' };
@@ -38,7 +37,6 @@ function Statement({ statementStore }: StatementProps) {
     state,
     page,
     pageSize,
-    statementsData,
     statementData,
     statementsDataPagination,
     getStatementsPagination,
@@ -90,7 +88,6 @@ function Statement({ statementStore }: StatementProps) {
           {!statementsDataPagination && state === PENDING && <CircularProgress />}
           {statementsDataPagination && state === DONE && (
             <StatementTable
-              statements={statementsData}
               getStatement={getStatement}
               updateStatement={updateStatement}
               deleteStatement={deleteStatement}

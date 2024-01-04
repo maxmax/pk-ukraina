@@ -5,13 +5,15 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { NewStatementProps } from '../../../types';
+
 type NewProps = {
-	createStatement: Function;
-	setParentOpen: Function;
+	createStatement: (data: NewStatementProps) => Promise<void>;
+	setParentOpen: (value: boolean) => void;
 };
 
 const defaultAttributes = {
-  diskNumber: '',
+	diskNumber: '',
   outputName: '',
   inputName: '',
   deedNumber: '',

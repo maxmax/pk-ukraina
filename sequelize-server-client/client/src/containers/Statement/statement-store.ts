@@ -98,7 +98,7 @@ class StatementStore {
     try {
       this.state = StatementStoreState.Pending;
       const result = await performRequest<ApiResponse>('statements', 'POST', data);
-      await this.setNotifications("New request created!");
+      await this.setNotifications(result.message);
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
       await this.setNotifications('Something went wrong!');
