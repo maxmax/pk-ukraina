@@ -33,6 +33,8 @@ app.get("/", (req, res) => {
 
 require("./app/routes/statement.routes")(app);
 
+require("./app/routes/fake.routes")(app);
+
 
 // set port, listen for requests
 const PORT = process.env.SERVER_PORT || 8080;
