@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
+import reactRefresh from '@vitejs/plugin-react-refresh';
 import eslintPlugin from 'vite-plugin-eslint';
 
 // https://vitejs.dev/config/
@@ -13,7 +14,8 @@ export default defineConfig(({ mode }) => {
     base: VITE_BASE,
     plugins: [
       react(),
-      eslintPlugin()
+      eslintPlugin(),
+      reactRefresh()
     ],
     preview: {
       port: 5173,
