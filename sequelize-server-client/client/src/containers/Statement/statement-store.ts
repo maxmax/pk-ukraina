@@ -66,7 +66,7 @@ class StatementStore {
       this.pageSize = result.pageSize;
       this.state = StatementStoreState.Done;
     } catch (error) {
-      await this.setNotifications('Something went wrong!');
+      this.setNotifications('Something went wrong!');
       this.state = StatementStoreState.Error;
     }
   }
@@ -76,7 +76,7 @@ class StatementStore {
       const result = await performRequest<StatementProps>(`statements/${id}`, 'GET');
       this.statementData = result;
     } catch (error) {
-      await this.setNotifications('Something went wrong!');
+      this.setNotifications('Something went wrong!');
       this.state = StatementStoreState.Error;
     }
   }
@@ -85,11 +85,11 @@ class StatementStore {
     try {
       this.state = StatementStoreState.Pending;
       const result = await performRequest<ApiResponse>(`statements/${id}`, 'DELETE');
-      await this.setNotifications(result.message);
+      this.setNotifications(result.message);
       this.statementData = null;
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
-      await this.setNotifications('Something went wrong!');
+      this.setNotifications('Something went wrong!');
       this.state = StatementStoreState.Error;
     }
   }
@@ -98,10 +98,10 @@ class StatementStore {
     try {
       this.state = StatementStoreState.Pending;
       const result = await performRequest<ApiResponse>('statements', 'POST', data);
-      await this.setNotifications(result.message);
+      this.setNotifications(result.message);
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
-      await this.setNotifications('Something went wrong!');
+      this.setNotifications('Something went wrong!');
       this.state = StatementStoreState.Error;
     }
   }
@@ -110,11 +110,11 @@ class StatementStore {
     try {
       this.state = StatementStoreState.Pending;
       const result = await performRequest<ApiResponse>(`statements/${data.id}`, 'PUT', data);
-      await this.setNotifications(result.message);
+      this.setNotifications(result.message);
       this.statementData = null;
       await this.getStatementsPagination(this.page, this.pageSize);
     } catch (error) {
-      await this.setNotifications('Something went wrong!');
+      this.setNotifications('Something went wrong!');
       this.state = StatementStoreState.Error;
     }
   }

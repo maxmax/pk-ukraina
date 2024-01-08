@@ -30,7 +30,7 @@ interface StatementProps {
 
 function Statement({ statementStore }: StatementProps) {
   if (!statementStore) {
-    throw new Error('statementStore is required.'); // Обработка отсутствия statementStore
+    throw new Error('statementStore is required.');
   }
 
   const {
@@ -59,14 +59,7 @@ function Statement({ statementStore }: StatementProps) {
       getStatementsPagination(page, pageSize);
     }
   }, [getStatementsPagination, statementsDataPagination, state, page, pageSize]);
-
-
-  useEffect(() => {
-    if (notifications) {
-      console.log('notifications:', notifications);
-    }
-  }, [notifications]);
-
+  
   return (
     <Container maxWidth="lg">
       {!!notifications &&
