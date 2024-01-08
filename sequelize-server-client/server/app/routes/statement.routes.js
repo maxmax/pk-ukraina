@@ -30,4 +30,3 @@ module.exports = app => {
 
 	app.use('/api/statements', router);
 };
-  
