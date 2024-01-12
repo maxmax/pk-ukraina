@@ -1,44 +1,39 @@
-// const io = require('socket.io');
+// server/app/controllers/messages.controller.js
+const apiMessages = [];
 
 function initializeWebSocket(io, handleWebSocketMessages) {
   io.on("connection", (socket) => {
     console.log("A user connected");
 
-    // Example: Send a welcome message to the client when connected
     socket.emit("message", "Welcome to the WebSocket server!");
 
-    // Example: Listen for messages from the client
     socket.on("clientMessage", (data) => {
-      handleWebSocketMessages(io, socket, data);
+      handleWebSocketMessages(io, socket, data, apiMessages);
     });
 
-    // Disconnect event
     socket.on("disconnect", () => {
       console.log("A user disconnected");
     });
   });
 }
 
-function handleWebSocketMessages(io, socket, data) {
+function handleWebSocketMessages(io, socket, data, apiMessages) {
   console.log("Received message from client:", data);
 
-  // You can implement additional functionality based on the received data
-  // Example: Broadcast this message to all connected clients
-  io.emit("serverMessage", "Server received your message");
+  io.emit("serverMessage", "Server received your message: " + data);
 
-  // Implement your additional logic here
+  apiMessages.push(data);
+
+  io.emit("apiMessage", { messages: apiMessages });
 }
 
 function getMessages(req, res) {
-  // Processing a GET request for /api/messages
-  res.json({ messages: "Get messages from WebSocket" });
+  res.json({ messages: apiMessages });
 }
 
 function postMessage(req, res) {
-  // Processing a POST request for /api/messages
   const message = req.body.message;
 
-  // Sending a message via WebSocket
   io.emit("serverMessage", message);
 
   res.json({ success: true, message: "Message sent to WebSocket" });
