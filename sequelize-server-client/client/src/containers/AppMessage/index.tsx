@@ -11,7 +11,7 @@ const AppMessage: React.FC = () => {
 
   useEffect(() => {
     // Initialize WebSocket on the client
-    const socket = io('http://localhost:8080', {
+    const socket = io('ws://localhost:8080', {
       withCredentials: true,
     });
     setSocket(socket);
