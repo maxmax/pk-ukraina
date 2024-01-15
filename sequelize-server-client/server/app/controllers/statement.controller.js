@@ -1,6 +1,7 @@
 const db = require("../models");
 const Statement = db.statement;
 const Op = db.Sequelize.Op;
+const { getIoInstance } = require("../sockets/socket.controller");
 
 // Create and Save a new Statement
 exports.create = (req, res) => {
@@ -27,6 +28,8 @@ exports.create = (req, res) => {
   Statement.create(statement)
     .then(data => {
       res.send(data);
+      const io = getIoInstance();
+      io.emit("statementChange", { action: "create", statement: data });
     })
     .catch(err => {
       res.status(500).send({
@@ -116,6 +119,8 @@ exports.update = (req, res) => {
         res.send({
           message: "Statement was updated successfully."
         });
+        const io = getIoInstance();
+        io.emit("statementChange", { action: "update", statementId: id });
       } else {
         res.send({
           message: `Cannot update Statement with id=${id}. Maybe Statement was not found or req.body is empty!`
@@ -141,6 +146,8 @@ exports.delete = (req, res) => {
         res.send({
           message: "Statement was deleted successfully!"
         });
+        const io = getIoInstance();
+        io.emit("statementChange", { action: "delete", statementId: id });
       } else {
         res.send({
           message: `Cannot delete Statement with id=${id}. Maybe Statement was not found!`

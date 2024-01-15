@@ -6,6 +6,7 @@ import Statement from './containers/Statement';
 import VirtualizedContainer from './containers/VirtualizedContainer';
 import VirtualizedTable from './containers/VirtualizedTable';
 import GridContainer from './containers/GridContainer';
+import WebSocketComponent from './containers/WebSocketComponent';
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/virtualized-window" element={<VirtualizedContainer />} />
         <Route path="/virtualized-table" element={<VirtualizedTable />} />
         <Route path="/grid-container" element={<GridContainer />} />
+        <Route path="/websocket" element={<WebSocketComponent />} />
       </Routes>
     </Provider>
   );
