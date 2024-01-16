@@ -64,9 +64,6 @@ const WebSocketComponent: React.FC = () => {
             <div>
               {statement.dateReceiving}
             </div>
-            <div>
-              {statement.diskNumber}
-            </div>
           </li>
         ))}
       </ul>
