@@ -1,13 +1,16 @@
 const express = require("express");
-require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
+const http = require("http");
 const cors = require("cors");
+const { initializeWebSocket } = require("./app/sockets/socket.controller");
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 
 const app = express();
+const server = http.createServer(app);
 
-var corsOptions = {
+// Установка CORS middleware
+const corsOptions = {
   origin: process.env.CORS_OPTIONS || "http://localhost:5173"
 };
-
 app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
@@ -32,12 +35,13 @@ app.get("/", (req, res) => {
 });
 
 require("./app/routes/statement.routes")(app);
-
 require("./app/routes/fake.routes")(app);
 
+// Инициализация WebSocket
+initializeWebSocket(server);
 
 // set port, listen for requests
 const PORT = process.env.SERVER_PORT || 8080;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
