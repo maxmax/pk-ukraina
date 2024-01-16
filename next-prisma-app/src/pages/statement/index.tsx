@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import CreateStatementButton from 'src/components/Buttons/CreateStatement'
 import CustomHead from 'src/components/CustomHead'
 import prisma from 'src/utils/prisma'
-import { 
+import {
   Divider,
   Typography,
   Table,
@@ -55,7 +55,7 @@ export default function Statement({
       <CreateStatementButton />
       <Divider />
       <Typography variant='h4' textAlign='center' py={2}>
-        {'Відомості про рух носія'}
+        {'Statements'}
       </Typography>
       {statement?.length ? (
         <>
@@ -63,12 +63,12 @@ export default function Statement({
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">{'Дата отримання'}</TableCell>
-                  <TableCell align="center">{'Номер жорсткого диску'}</TableCell>
-                  <TableCell align="center">{'ПІБ та підпис працівника, що передав носій'}</TableCell>
-                  <TableCell align="center">{'ПІБ та підпис працівника який отримав носій'}</TableCell>
-                  <TableCell align="center">{'Номер Акту про знищення жорсткого диску'}</TableCell>
-                  <TableCell align="center">{'Примітки'}</TableCell>
+                  <TableCell align="center">{'Date of receipt'}</TableCell>
+                  <TableCell align="center">{'Hard disk drive number'}</TableCell>
+                  <TableCell align="center">{'Full name and signature of the employee transferring'}</TableCell>
+                  <TableCell align="center">{'Full name and signature of the employee receiving'}</TableCell>
+                  <TableCell align="center">{'Number of the Act on the destruction of the hard disk drive'}</TableCell>
+                  <TableCell align="center">{'Notes'}</TableCell>
                   <TableCell align="center">{'-/-'}</TableCell>
                 </TableRow>
               </TableHead>
@@ -89,7 +89,7 @@ export default function Statement({
                     <TableCell align="center">
                       <Link href={`statement/${row.id}`}>
                         <Button>
-                          <Typography variant='body2'>{'Більше'}</Typography>
+                          <Typography variant='body2'>{'More'}</Typography>
                           <ArrowForwardIosIcon fontSize='small' />
                         </Button>
                       </Link>
@@ -105,14 +105,14 @@ export default function Statement({
             component="div"
             count={statement.length}
             rowsPerPage={rowsPerPage}
-            labelRowsPerPage={'Рядків на сторінці:'}
+            labelRowsPerPage={'Lines on a page:'}
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </>
       ) : (
-        <Typography align="center" mt={2}>{'Заяви ще немає'}</Typography>
+        <Typography align="center" mt={2}>{'There is no application yet'}</Typography>
       )}
     </>
   )

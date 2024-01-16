@@ -1,21 +1,21 @@
 import { useUser } from 'src/utils/swr'
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
 import { Button, IconButton } from '@mui/material'
-import type { Statement } from '@prisma/client'
-import EditStatementForm from '../Forms/EditStatement'
+import type { News } from '@prisma/client'
+import EditNewsForm from '../Forms/EditNews'
 import Modal from '../Modal'
 
 type Props = {
-  statement: Omit<Statement, 'createdAt' | 'updatedAt'> & {
+  news: Omit<News, 'createdAt' | 'updatedAt'> & {
     createdAt: string
   }
   icon?: boolean
 }
 
-export default function EditStatementButton({ statement, icon = true }: Props) {
+export default function EditNewsButton({ news, icon = true }: Props) {
   const { user } = useUser()
 
-  if (!user || user.id !== statement.authorId) return null
+  if (!user || user.id !== news.authorId) return null
 
   return (
     <Modal
@@ -30,7 +30,7 @@ export default function EditStatementButton({ statement, icon = true }: Props) {
           </Button>
         )
       }
-      modalContent={<EditStatementForm statement={statement} />}
+      modalContent={<EditNewsForm news={news} />}
       size='M'
     />
   )

@@ -1,10 +1,10 @@
 import { useUser } from 'src/utils/swr'
 import { Button } from '@mui/material'
 import { toast } from 'react-toastify'
-import CreateStatementForm from '../Forms/CreareStatement'
+import CreateNewsForm from '../Forms/CreareNews'
 import Modal from '../Modal'
 
-export default function CreateStatementButton() {
+export default function CreateNewsButton() {
   const { user } = useUser()
 
   const onClick = () => {
@@ -20,7 +20,7 @@ export default function CreateStatementButton() {
           {'Create a new'}
         </Button>
       }
-      modalContent={<CreateStatementForm />}
+      modalContent={<CreateNewsForm />}
       size='M'
     />
   ) : (

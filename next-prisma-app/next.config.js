@@ -9,8 +9,8 @@ const securityHeaders = [
 	  key: 'Cross-Origin-Opener-Policy',
 	  value: 'same-origin-allow-popups'
 	},
-	{ key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' },
-	{ key: 'Referrer-Policy', value: 'no-referrer' },
+	// { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' },
+	// { key: 'Referrer-Policy', value: 'no-referrer' },
 	{
 	  key: 'Strict-Transport-Security',
 	  value: 'max-age=31536000; includeSubDomains'
@@ -29,7 +29,7 @@ const securityHeaders = [
 const nextConfig = {
 	reactStrictMode: true,
 	images: {
-		domains: ['images.unsplash.com']
+		domains: ['images.unsplash.com', 'upload.wikimedia.org']
 	},
   async headers() {
     return [

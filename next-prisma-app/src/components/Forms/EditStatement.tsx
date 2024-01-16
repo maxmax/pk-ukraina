@@ -93,34 +93,20 @@ export default function EditStatementForm({ closeModal, statement }: Props) {
 
   return (
     <FormFieldsWrapper handleSubmit={handleSubmit}>
-      <Typography variant='h4'>{'Pедагувати'}</Typography>
+      <Typography variant='h4'>{'Edit'}</Typography>
       <input type='hidden' name='statementId' defaultValue={statement.id} />
 			<LocalizationProvider dateAdapter={AdapterDayjs}>
-				<DatePicker 
-					label="Дата отримання"
-					value={dataValue} 
+				<DatePicker
+					label={'Date of receipt'}
+					value={dataValue}
 					format="DD/MM/YYYY"
-					onChange={(newValue) => setDataValue(newValue)} 
+					onChange={(newValue) => setDataValue(newValue)}
 				/>
 			</LocalizationProvider>
-      {/*<FormControl required>
-        <InputLabel htmlFor='dateReceiving'>Дата отримання</InputLabel>
-        <Input
-          sx={{ gap: theme.spacing(1) }}
-          id='dateReceiving'
-          type='text'
-          name='dateReceiving'
-          inputProps={{
-            minLength: 3
-          }}
-          defaultValue={statement.dateReceiving}
-        />
-      </FormControl>
-			*/}
 			<Grid container spacing={2}>
 				<Grid item xs={6}>
 					<FormControl required>
-						<InputLabel htmlFor='diskNumber'>Номер жорсткого диску</InputLabel>
+						<InputLabel htmlFor='diskNumber'>{'Hard disk drive number'}</InputLabel>
 						<Input
 							sx={{ gap: theme.spacing(1) }}
 							id='diskNumber'
@@ -135,7 +121,7 @@ export default function EditStatementForm({ closeModal, statement }: Props) {
 				</Grid>
 				<Grid item xs={6}>
 					<FormControl required>
-						<InputLabel htmlFor='outputName'>ПІБ та підпис працівника, що передав носій</InputLabel>
+						<InputLabel htmlFor='outputName'>{'Full name and signature of the employee transferring'}</InputLabel>
 						<Input
 							sx={{ gap: theme.spacing(1) }}
 							id='outputName'
@@ -152,7 +138,7 @@ export default function EditStatementForm({ closeModal, statement }: Props) {
 			<Grid container spacing={2}>
 				<Grid item xs={6}>
 					<FormControl required>
-						<InputLabel htmlFor='inputName'>ПІБ та підпис працівника який отримав носій</InputLabel>
+						<InputLabel htmlFor='inputName'>{'Full name and signature of the employee receiving'}</InputLabel>
 						<Input
 							sx={{ gap: theme.spacing(1) }}
 							id='inputName'
@@ -167,7 +153,7 @@ export default function EditStatementForm({ closeModal, statement }: Props) {
 				</Grid>
 				<Grid item xs={6}>
 					<FormControl required>
-						<InputLabel htmlFor='deedNumber'>Номер Акту про знищення жорсткого диску</InputLabel>
+						<InputLabel htmlFor='deedNumber'>{'Number of the Act on the destruction of the hard disk drive'}</InputLabel>
 						<Input
 							sx={{ gap: theme.spacing(1) }}
 							id='deedNumber'
@@ -178,11 +164,11 @@ export default function EditStatementForm({ closeModal, statement }: Props) {
 							}}
 							defaultValue={statement.deedNumber}
 						/>
-					</FormControl>						
+					</FormControl>
 				</Grid>
 				<Grid item xs={6}>
 					<FormControl required>
-						<InputLabel htmlFor='notes'>Примітки</InputLabel>
+						<InputLabel htmlFor='notes'>{'Notes'}</InputLabel>
 						<Input
 							sx={{ gap: theme.spacing(1) }}
 							id='notes'
@@ -193,11 +179,11 @@ export default function EditStatementForm({ closeModal, statement }: Props) {
 							}}
 							defaultValue={statement.notes}
 						/>
-					</FormControl>						
+					</FormControl>
 				</Grid>
 			</Grid>
       <Button type='submit' variant='contained' color='success'>
-        {'Оновити'}
+        {'Update'}
       </Button>
     </FormFieldsWrapper>
   )
