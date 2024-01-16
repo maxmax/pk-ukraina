@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import prisma from 'src/utils/prisma';
 import dayjs from 'dayjs';
 import { useUser } from 'src/utils/swr';

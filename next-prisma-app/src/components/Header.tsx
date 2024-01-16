@@ -5,8 +5,9 @@ import MobileMenu from './Menu/Mobile'
 export type PageLinks = { title: string; href: string }[]
 
 const PAGE_LINKS = [
-  { title: 'Головна', href: '/' },
-  { title: 'Відомості про рух носія', href: '/statement' },
+  { title: 'Home', href: '/' },
+  { title: 'News', href: '/news' },
+  { title: 'Statement', href: '/statement' },
 ]
 
 export default function Header() {

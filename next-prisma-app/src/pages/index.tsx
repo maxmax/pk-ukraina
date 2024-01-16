@@ -20,10 +20,10 @@ export default function Home({
     <>
       <CustomHead title='Home Page' description='This is Home Page' />
       <Typography variant='h4' textAlign='center' py={2}>
-        {'Ласкаво просимо'}, {user ? user.username || user.email : 'незнайомець'}
+        {'Welcome'}, {user ? user.username || user.email : 'stranger'}
       </Typography>
       <Typography variant='h6' textAlign='center' py={2}>
-        {'Новини або якась важлива інформація щодо сервісу'}
+        {'Important information'}
       </Typography>
       <Container maxWidth="sm" sx={{pb: 8}}>
         {blocks.map((block, i) => (
