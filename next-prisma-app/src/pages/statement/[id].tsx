@@ -46,7 +46,7 @@ export default function StatementPage({
               <Link href='/statement'>
                 <Button aria-label='return to about page'>
                   <ArrowBackIosNewIcon fontSize='small' />
-                  <Typography variant='body2'>{'Назад'}</Typography>
+                  <Typography variant='body2'>{'Back'}</Typography>
                 </Button>
               </Link>
             }
@@ -58,7 +58,7 @@ export default function StatementPage({
               <TableBody>
                 <TableRow>
                   <TableCell component="th" scope="row" sx={{ borderRight: 1, borderColor: 'grey.300' }}>
-                    <span>{'Дата отримання'}</span>
+                    <span>{'Date of receipt'}</span>
                   </TableCell>
                   <TableCell>
                     {dayjs(statement.dateReceiving).format('DD/MM/YYYY')}
@@ -66,7 +66,7 @@ export default function StatementPage({
                 </TableRow>
                 <TableRow>
                   <TableCell component="th" scope="row" sx={{ borderRight: 1, borderColor: 'grey.300' }}>
-                    <span>{'Номер жорсткого диску'}</span>
+                    <span>{'Hard disk drive number'}</span>
                   </TableCell>
                   <TableCell>
                     {statement.diskNumber}
@@ -74,7 +74,7 @@ export default function StatementPage({
                 </TableRow>
                 <TableRow>
                   <TableCell component="th" scope="row" sx={{ borderRight: 1, borderColor: 'grey.300' }}>
-                    <span>{'ПІБ та підпис працівника, що передав носій'}</span>
+                    <span>{'Full name and signature of the employee transferring'}</span>
                   </TableCell>
                   <TableCell>
                     {statement.outputName}
@@ -82,7 +82,7 @@ export default function StatementPage({
                 </TableRow>
                 <TableRow>
                   <TableCell component="th" scope="row" sx={{ borderRight: 1, borderColor: 'grey.300' }}>
-                    <span>{'ПІБ та підпис працівника який отримав носій'}</span>
+                    <span>{'Full name and signature of the employee receiving'}</span>
                   </TableCell>
                   <TableCell>
                     {statement.inputName}
@@ -90,7 +90,7 @@ export default function StatementPage({
                 </TableRow>
                 <TableRow>
                   <TableCell component="th" scope="row" sx={{ borderRight: 1, borderColor: 'grey.300' }}>
-                    <span>{'Номер Акту про знищення жорсткого диску'}</span>
+                    <span>{'Number of the Act on the destruction of the hard disk drive'}</span>
                   </TableCell>
                   <TableCell>
                     {statement.deedNumber}
@@ -98,7 +98,7 @@ export default function StatementPage({
                 </TableRow>
                 <TableRow>
                   <TableCell component="th" scope="row" sx={{ borderRight: 1, borderColor: 'grey.300' }}>
-                    <span>{'Примітки'}</span>
+                    <span>{'Notes'}</span>
                   </TableCell>
                   <TableCell>
                     {statement.notes}

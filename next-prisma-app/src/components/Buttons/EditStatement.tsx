@@ -26,7 +26,7 @@ export default function EditStatementButton({ statement, icon = true }: Props) {
           </IconButton>
         ) : (
           <Button variant='contained' color='info'>
-            {'Редагувати'}
+            {'Edit'}
           </Button>
         )
       }
