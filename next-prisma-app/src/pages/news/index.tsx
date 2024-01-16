@@ -12,6 +12,7 @@ import {
   Button,
 } from '@mui/material';
 import Link from 'next/link';
+import CreateNewsButton from 'src/components/Buttons/CreateNews'
 
 import type {
   GetServerSidePropsContext,
@@ -25,7 +26,9 @@ export default function News({
   return (
     <>
       <CustomHead title='News' description='Site News' />
-      <Container maxWidth="lg">
+      <CreateNewsButton />
+      <Divider />
+      <Container maxWidth="lg" sx={{ mb: 5 }}>
         <Typography variant="h1">
           News
         </Typography>

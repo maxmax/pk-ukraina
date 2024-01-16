@@ -32,17 +32,17 @@ type Props = {
 export default function CreateStatementForm({ closeModal }: Props) {
 
 		const [dataValue, setDataValue] = useState<Dayjs | null>(dayjs(new Date()));
-    
+
 		const theme = useTheme()
     const { user, accessToken } = useUser()
     const router = useRouter()
-  
+
     const [errors, setErrors] = useState<{
       content?: number
     }>({})
-  
+
     if (!user) return null
-  
+
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
       if (!user) return
       e.preventDefault()
@@ -52,7 +52,7 @@ export default function CreateStatementForm({ closeModal }: Props) {
       //if (formData.outputName.length < 50) {
       //  return setErrors({ content: formData.outputName.length })
       //}
-  
+
       try {
         const response = await fetch('/api/statement', {
           method: 'POST',
@@ -64,15 +64,15 @@ export default function CreateStatementForm({ closeModal }: Props) {
             Authorization: `Bearer ${accessToken}`
           }
         })
-  
+
         if (!response.ok) {
           throw response
         }
-  
+
         const statement = await response.json()
-  
+
         router.push(`/statement/${statement.id}`)
-  
+
         if (closeModal) {
           closeModal()
         }
@@ -80,28 +80,28 @@ export default function CreateStatementForm({ closeModal }: Props) {
         console.error(e)
       }
     }
-  
+
     const onInput = () => {
       if (Object.keys(errors).length) {
         setErrors({ content: undefined })
       }
     }
-		
+
     return (
       <FormFieldsWrapper handleSubmit={handleSubmit}>
-        <Typography variant='h4'>{'Створити заявку'}</Typography>
+        <Typography variant='h4'>{'Create New'}</Typography>
 				<LocalizationProvider dateAdapter={AdapterDayjs}>
-					<DatePicker 
-						label="Дата отримання"
-						value={dataValue} 
+					<DatePicker
+						label="Date of receipt"
+						value={dataValue}
 						format="DD/MM/YYYY"
-						onChange={(newValue) => setDataValue(newValue)} 
+						onChange={(newValue) => setDataValue(newValue)}
 					/>
 				</LocalizationProvider>
         <Grid container spacing={2}>
 					<Grid item xs={6}>
 						<FormControl required>
-							<InputLabel htmlFor='diskNumber'>{'Номер жорсткого диску'}</InputLabel>
+							<InputLabel htmlFor='diskNumber'>{'Hard disk drive number'}</InputLabel>
 							<Input
 							sx={{ gap: theme.spacing(1) }}
 							id='diskNumber'
@@ -115,7 +115,7 @@ export default function CreateStatementForm({ closeModal }: Props) {
 					</Grid>
 					<Grid item xs={6}>
 						<FormControl required>
-							<InputLabel htmlFor='outputName'>{'ПІБ та підпис працівника, що передав носій'}</InputLabel>
+							<InputLabel htmlFor='outputName'>{'Full name and signature of the employee transferring'}</InputLabel>
 							<Input
 							sx={{ gap: theme.spacing(1) }}
 							id='outputName'
@@ -131,7 +131,7 @@ export default function CreateStatementForm({ closeModal }: Props) {
         <Grid container spacing={2}>
 					<Grid item xs={6}>
 						<FormControl required>
-							<InputLabel htmlFor='inputName'>{'ПІБ та підпис працівника який отримав носій'}</InputLabel>
+							<InputLabel htmlFor='inputName'>{'Full name and signature of the employee receiving'}</InputLabel>
 							<Input
 							sx={{ gap: theme.spacing(1) }}
 							id='inputName'
@@ -145,7 +145,7 @@ export default function CreateStatementForm({ closeModal }: Props) {
 					</Grid>
 					<Grid item xs={6}>
 						<FormControl required>
-							<InputLabel htmlFor='deedNumber'>{'Номер Акту про знищення жорсткого диску'}</InputLabel>
+							<InputLabel htmlFor='deedNumber'>{'Number of the Act on the destruction of the hard disk drive'}</InputLabel>
 							<Input
 							sx={{ gap: theme.spacing(1) }}
 							id='deedNumber'
@@ -155,11 +155,11 @@ export default function CreateStatementForm({ closeModal }: Props) {
 								minLength: 3
 							}}
 							/>
-						</FormControl>						
+						</FormControl>
 					</Grid>
 					<Grid item xs={6}>
 						<FormControl required>
-							<InputLabel htmlFor='notes'>{'Примітки'}</InputLabel>
+							<InputLabel htmlFor='notes'>{'Notes'}</InputLabel>
 							<Input
 							sx={{ gap: theme.spacing(1) }}
 							id='notes'
@@ -169,11 +169,11 @@ export default function CreateStatementForm({ closeModal }: Props) {
 								minLength: 3
 							}}
 							/>
-						</FormControl>						
+						</FormControl>
 					</Grid>
 				</Grid>
         <Button type='submit' variant='contained' color='success'>
-					{'Створити'}
+					{'Create'}
         </Button>
       </FormFieldsWrapper>
     )
