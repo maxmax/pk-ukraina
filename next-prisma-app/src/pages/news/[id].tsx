@@ -1,6 +1,8 @@
 import prisma from 'src/utils/prisma';
 import dayjs from 'dayjs';
 import { useUser } from 'src/utils/swr';
+import EditNewsButton from 'src/components/Buttons/EditNews';
+import RemoveNewsButton from 'src/components/Buttons/RemoveNews';
 import CustomHead from 'src/components/CustomHead';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import {
@@ -63,6 +65,20 @@ export default function NewsPage({
               {article.content}
             </Typography>
           </CardContent>
+          <CardActions>
+            <Box display='flex' justifyContent='flex-end' gap={2} width='100%'>
+              {isNewsBelongsToUser && (
+                <>
+                  <EditNewsButton news={article} icon={false} />
+                  <RemoveNewsButton
+                    newsId={article.id}
+                    authorId={article.authorId}
+                    icon={false}
+                  />
+                </>
+              )}
+            </Box>
+          </CardActions>
         </Card>
       </Box>
     </>

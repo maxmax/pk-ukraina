@@ -1,11 +1,11 @@
 import * as React from "react";
 import dayjs from 'dayjs';
-import EditStatementButton from 'src/components/Buttons/EditStatement'
-import RemoveStatementButton from 'src/components/Buttons/RemoveStatement'
-import CustomHead from 'src/components/CustomHead'
-import prisma from 'src/utils/prisma'
-import { useUser } from 'src/utils/swr'
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import EditStatementButton from 'src/components/Buttons/EditStatement';
+import RemoveStatementButton from 'src/components/Buttons/RemoveStatement';
+import CustomHead from 'src/components/CustomHead';
+import prisma from 'src/utils/prisma';
+import { useUser } from 'src/utils/swr';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import {
   Avatar,
   Box,
@@ -20,13 +20,13 @@ import {
   TableCell,
   TableContainer,
   TableRow
-} from '@mui/material'
+} from '@mui/material';
 
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType
-} from 'next'
-import Link from 'next/link'
+} from 'next';
+import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
 export default function StatementPage({
