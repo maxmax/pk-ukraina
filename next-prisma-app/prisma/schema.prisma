@@ -18,7 +18,8 @@ model User {
   avatarUrl String?
   email     String  @unique
   password  String
-  statement     Statement[]
+  statement Statement[]
+  news      News[]
 }
 
 // Statement Model
@@ -30,6 +31,22 @@ model Statement {
   inputName         String
   deedNumber        String
   notes             String
+  author    User     @relation(fields: [authorId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // unique combination of fields used to update and delete a record
+  @@unique([id, authorId])
+}
+
+// News Model
+model News {
+  id                String   @id @default(uuid())
+  date              String
+  title             String
+  excerpt           String
+  content           String
+  img               String
   author    User     @relation(fields: [authorId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   authorId  String
   createdAt DateTime @default(now())
